@@ -107,7 +107,7 @@ static TRVSClangFormat *sharedPlugin;
 #pragma mark - Private
 
 - (NSArray *)styles {
-  return @[ @"LLVM", @"Google", @"Chromium", @"Mozilla", @"WebKit" ];
+  return @[ @"LLVM", @"Google", @"Chromium", @"Mozilla", @"WebKit", @"File" ];
 }
 
 - (NSURL *)documentURL {
