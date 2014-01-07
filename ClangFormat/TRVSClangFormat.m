@@ -61,6 +61,18 @@ static TRVSClangFormat *sharedPlugin;
   }
 }
 
+- (void)didReadToEndOfFile:(NSNotification *)notification {
+  NSData *data =
+  [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+  NSString *string =
+  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  [TRVSIDE replaceTextWithString:string];
+  [[NSNotificationCenter defaultCenter]
+   removeObserver:self
+   name:NSFileHandleReadToEndOfFileCompletionNotification
+   object:[notification object]];
+}
+
 #pragma mark - Actions
 
 - (void)setupMenuItems {
@@ -96,6 +108,14 @@ static TRVSClangFormat *sharedPlugin;
   NSTask *task = [[NSTask alloc] init];
   [task setLaunchPath:[self.bundle pathForResource:@"clang-format" ofType:nil]];
   [task setArguments:[self argumentsWithStyle:menuItem.title]];
+  NSPipe *pipe = [NSPipe pipe];
+  [task setStandardOutput:pipe];
+  [[NSNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(didReadToEndOfFile:)
+             name:NSFileHandleReadToEndOfFileCompletionNotification
+           object:[pipe fileHandleForReading]];
+  [[pipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
   [task launch];
 }
 
@@ -107,7 +127,6 @@ static TRVSClangFormat *sharedPlugin;
 
 - (NSArray *)argumentsWithStyle:(NSString *)style {
   NSMutableArray *arguments = [[NSMutableArray alloc] init];
-  [arguments addObject:@"-i"];
   [arguments addObject:[NSString stringWithFormat:@"--style=%@", style]];
   [arguments addObject:[[self documentURL] path]];
   [arguments addObjectsFromArray:[self linesArguments]];

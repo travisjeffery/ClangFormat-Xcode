@@ -11,9 +11,12 @@
 @implementation TRVSIDE
 
 + (id)currentEditor {
-  NSWindowController *currentWindowController = [[NSApp keyWindow] windowController];
-  if ([currentWindowController isKindOfClass:NSClassFromString(@"IDEWorkspaceWindowController")]) {
-    IDEWorkspaceWindowController *workspaceController = (IDEWorkspaceWindowController *)currentWindowController;
+  NSWindowController *currentWindowController =
+      [[NSApp keyWindow] windowController];
+  if ([currentWindowController
+          isKindOfClass:NSClassFromString(@"IDEWorkspaceWindowController")]) {
+    IDEWorkspaceWindowController *workspaceController =
+        (IDEWorkspaceWindowController *)currentWindowController;
     IDEEditorArea *editorArea = [workspaceController editorArea];
     IDEEditorContext *editorContext = [editorArea lastActiveEditorContext];
     return [editorContext editor];
@@ -22,47 +25,65 @@
 }
 
 + (IDEWorkspaceDocument *)workspaceDocument {
-  NSWindowController *currentWindowController = [[NSApp keyWindow] windowController];
+  NSWindowController *currentWindowController =
+      [[NSApp keyWindow] windowController];
   id document = [currentWindowController document];
-  if (currentWindowController && [document isKindOfClass:NSClassFromString(@"IDEWorkspaceDocument")]) {
+  if (currentWindowController &&
+      [document isKindOfClass:NSClassFromString(@"IDEWorkspaceDocument")]) {
     return (IDEWorkspaceDocument *)document;
   }
   return nil;
 }
 
 + (IDESourceCodeDocument *)sourceCodeDocument {
-  if ([[self currentEditor] isKindOfClass:NSClassFromString(@"IDESourceCodeEditor")]) {
+  if ([[self currentEditor]
+          isKindOfClass:NSClassFromString(@"IDESourceCodeEditor")]) {
     IDESourceCodeEditor *editor = [self currentEditor];
     return editor.sourceCodeDocument;
   }
-  
-  if ([[self currentEditor] isKindOfClass:NSClassFromString(@"IDESourceCodeComparisonEditor")]) {
+
+  if ([[self currentEditor]
+          isKindOfClass:NSClassFromString(@"IDESourceCodeComparisonEditor")]) {
     IDESourceCodeComparisonEditor *editor = [self currentEditor];
-    if ([[editor primaryDocument] isKindOfClass:NSClassFromString(@"IDESourceCodeDocument")]) {
-      IDESourceCodeDocument *document = (IDESourceCodeDocument *)editor.primaryDocument;
+    if ([[editor primaryDocument]
+            isKindOfClass:NSClassFromString(@"IDESourceCodeDocument")]) {
+      IDESourceCodeDocument *document =
+          (IDESourceCodeDocument *)editor.primaryDocument;
       return document;
     }
   }
-  
+
   return nil;
 }
 
 + (NSTextView *)textView {
-  if ([[self currentEditor] isKindOfClass:NSClassFromString(@"IDESourceCodeEditor")]) {
+  if ([[self currentEditor]
+          isKindOfClass:NSClassFromString(@"IDESourceCodeEditor")]) {
     IDESourceCodeEditor *editor = [self currentEditor];
     return editor.textView;
   }
-  
-  if ([[self currentEditor] isKindOfClass:NSClassFromString(@"IDESourceCodeComparisonEditor")]) {
+
+  if ([[self currentEditor]
+          isKindOfClass:NSClassFromString(@"IDESourceCodeComparisonEditor")]) {
     IDESourceCodeComparisonEditor *editor = [self currentEditor];
     return editor.keyTextView;
   }
-  
+
   return nil;
 }
 
 + (BOOL)hasSelection {
   return [[self textView] selectedRange].length > 0;
+}
+
++ (void)replaceTextWithString:(NSString *)string {
+  NSTextView *textView = [self textView];
+  NSRect visibleRect = [textView visibleRect];
+  NSRange selectedRange = NSMakeRange([textView selectedRange].location, 0);
+  [textView insertText:string
+      replacementRange:NSMakeRange(0, [[textView textStorage] length])];
+  [textView scrollRectToVisible:visibleRect];
+  [textView setSelectedRange:selectedRange];
 }
 
 @end

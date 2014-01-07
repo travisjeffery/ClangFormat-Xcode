@@ -126,4 +126,5 @@
 + (IDESourceCodeDocument *)sourceCodeDocument;
 + (NSTextView *)textView;
 + (BOOL)hasSelection;
++ (void)replaceTextWithString:(NSString *)string;
 @end
