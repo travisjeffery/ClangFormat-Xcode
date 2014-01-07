@@ -13,3 +13,5 @@ Clone this repo, build and run ClangFormat, restart Xcode.
 Menu > Edit > Clang Format > Pick a style.
 
 ![demo](https://raw.github.com/travisjeffery/ClangFormat-Xcode/master/README/clangformat-xcode-demo.gif)
+
+If you have selected a range(s) of text, only that text will be formatted, otherwise the whole file will be formatted.
