@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Travis Jeffery. All rights reserved.
 //
 
+#import <Cocoa/Cocoa.h>
+
 @interface DVTTextDocumentLocation : NSObject
 @property (readonly) NSRange characterRange;
 @property (readonly) NSRange lineRange;
@@ -117,4 +119,11 @@
 
 @interface IDEWorkspaceDocument : NSDocument
 @property (readonly) IDEWorkspace *workspace;
+@end
+
+@interface TRVSIDE : NSObject
++ (IDEWorkspaceDocument *)workspaceDocument;
++ (IDESourceCodeDocument *)sourceCodeDocument;
++ (NSTextView *)textView;
++ (BOOL)hasSelection;
 @end

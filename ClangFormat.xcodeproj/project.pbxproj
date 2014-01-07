@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		320B996E187C1293003DB7B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320B996D187C1293003DB7B3 /* Cocoa.framework */; };
+		32A11756187C351900923668 /* TRVSIDE.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A11755187C351900923668 /* TRVSIDE.m */; };
 		32A57EE8187C05A4002DEC9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A57EE7187C05A4002DEC9D /* Foundation.framework */; };
 		32A57EEE187C05A4002DEC9D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A57EEC187C05A4002DEC9D /* InfoPlist.strings */; };
 		32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */; };
@@ -17,6 +18,7 @@
 /* Begin PBXFileReference section */
 		320B996D187C1293003DB7B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		320B996F187C1777003DB7B3 /* TRVSIDE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSIDE.h; sourceTree = "<group>"; };
+		32A11755187C351900923668 /* TRVSIDE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSIDE.m; sourceTree = "<group>"; };
 		32A57EE2187C05A4002DEC9D /* ClangFormat.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClangFormat.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A57EE5187C05A4002DEC9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		32A57EE7187C05A4002DEC9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -75,6 +77,7 @@
 				32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */,
 				32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */,
 				320B996F187C1777003DB7B3 /* TRVSIDE.h */,
+				32A11755187C351900923668 /* TRVSIDE.m */,
 				32A57EEA187C05A4002DEC9D /* Supporting Files */,
 			);
 			path = ClangFormat;
@@ -167,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
+				32A11756187C351900923668 /* TRVSIDE.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

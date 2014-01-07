@@ -79,28 +79,23 @@ static TRVSClangFormat *sharedPlugin;
   NSMenu *formatMenu =
       [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Clang Format", nil)];
 
-    [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
-    {
-      NSMenuItem *menuItem =
-          [[NSMenuItem alloc] initWithTitle:format
-                                     action:@selector(formatWithStyle:)
-                              keyEquivalent:@""];
-      [menuItem setTarget:self];
-      [formatMenu addItem:menuItem];
-    }];
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
+  {
+    NSMenuItem *menuItem =
+        [[NSMenuItem alloc] initWithTitle:format
+                                   action:@selector(formatWithStyle:)
+                            keyEquivalent:@""];
+    [menuItem setTarget:self];
+    [formatMenu addItem:menuItem];
+  }];
 
-    [actionMenuItem setSubmenu:formatMenu];
+  [actionMenuItem setSubmenu:formatMenu];
 }
 
 - (void)formatWithStyle:(NSMenuItem *)menuItem {
   NSTask *task = [[NSTask alloc] init];
   [task setLaunchPath:[self.bundle pathForResource:@"clang-format" ofType:nil]];
-  NSArray *arguments = @[
-    @"-i",
-    [NSString stringWithFormat:@"--style=%@", menuItem.title],
-    [[self documentURL] path]
-  ];
-  [task setArguments:arguments];
+  [task setArguments:[self argumentsWithStyle:menuItem.title]];
   [task launch];
 }
 
@@ -108,6 +103,37 @@ static TRVSClangFormat *sharedPlugin;
 
 - (NSArray *)styles {
   return @[ @"LLVM", @"Google", @"Chromium", @"Mozilla", @"WebKit", @"File" ];
+}
+
+- (NSArray *)argumentsWithStyle:(NSString *)style {
+  NSMutableArray *arguments = [[NSMutableArray alloc] init];
+  [arguments addObject:@"-i"];
+  [arguments addObject:[NSString stringWithFormat:@"--style=%@", style]];
+  [arguments addObject:[[self documentURL] path]];
+  [arguments addObjectsFromArray:[self linesArguments]];
+  return arguments;
+}
+
+- (NSArray *)linesArguments {
+  NSMutableArray *arguments = [[NSMutableArray alloc] init];
+  if (![TRVSIDE hasSelection])
+    return arguments;
+
+  NSArray *selectedRanges = [[TRVSIDE textView] selectedRanges];
+  DVTSourceTextStorage *textStorage =
+      [[TRVSIDE sourceCodeDocument] textStorage];
+
+  [selectedRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
+    NSRange lineRange =
+        [textStorage lineRangeForCharacterRange:[rangeValue rangeValue]];
+    [arguments
+        addObject:[NSString stringWithFormat:
+                                @"--lines=%lu:%lu", lineRange.location + 1,
+                                lineRange.location + lineRange.length]];
+  }];
+
+  return arguments;
 }
 
 - (NSURL *)documentURL {
