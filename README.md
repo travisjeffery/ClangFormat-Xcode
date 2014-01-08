@@ -25,3 +25,25 @@ By using Clang Format > File in the plug-in menu, Clang will look for the neares
 If one of the built-in styles is close to what you want, you can bootstrap your own configuration with:
 
 `./bin/clang-format -style=llvm -dump-config > .clang-format`
+
+For example, this .clang-format is similar to the [Linux Kernel style](https://www.kernel.org/doc/Documentation/CodingStyle):
+
+```
+BasedOnStyle: LLVM
+IndentWidth: 8
+UseTab: Always
+BreakBeforeBraces: Linux
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+```
+
+And this is similar to Visual Studio's style:
+
+```
+UseTab: Never
+IndentWidth: 4
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0
+```
