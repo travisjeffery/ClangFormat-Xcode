@@ -15,6 +15,8 @@ static TRVSClangFormat *sharedPlugin;
 
 @property(nonatomic, strong) NSBundle *bundle;
 @property(nonatomic, strong) NSWindow *window;
+@property(nonatomic, strong) NSMenu *formatMenu;
+@property(nonatomic, copy) NSString *style;
 
 @end
 
@@ -36,6 +38,8 @@ static TRVSClangFormat *sharedPlugin;
     return nil;
 
   self.bundle = plugin;
+  
+  NSLog(@"bundle id %@", self.bundle.bundleIdentifier);
 
   [self setupMenuItems];
 
@@ -63,17 +67,69 @@ static TRVSClangFormat *sharedPlugin;
 
 - (void)didReadToEndOfFile:(NSNotification *)notification {
   NSData *data =
-  [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+      [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];
   NSString *string =
-  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   [TRVSIDE replaceTextWithString:string];
   [[NSNotificationCenter defaultCenter]
-   removeObserver:self
-   name:NSFileHandleReadToEndOfFileCompletionNotification
-   object:[notification object]];
+      removeObserver:self
+                name:NSFileHandleReadToEndOfFileCompletionNotification
+              object:[notification object]];
 }
 
 #pragma mark - Actions
+
+- (void)formatActiveFile:(NSMenuItem *)menuItem {
+  [self formatWithStyle:self.style];
+}
+
+- (void)formatSelectedFiles:(id)sender {
+}
+
+- (void)setDefaultFormatWithMenuItem:(NSMenuItem *)menuItem {
+  CFPreferencesSetValue((__bridge CFStringRef)([self styleKey]),
+                        (__bridge CFPropertyListRef)(menuItem.title),
+                        (__bridge CFStringRef)(self.bundle.bundleIdentifier),
+                        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  CFPreferencesSynchronize(CFSTR("com.travisjeffery.ClangFormat"),
+                           kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  _style = [menuItem.title copy];
+  [self.formatMenu removeAllItems];
+  [self addFormatMenuItemsToFormatMenu];
+}
+
+#pragma mark - Private
+
+- (void)addFormatMenuItemsToFormatMenu {
+  NSMenuItem *formatActiveFileItem = [[NSMenuItem alloc]
+      initWithTitle:NSLocalizedString(@"Format active file", nil)
+             action:@selector(formatActiveFile:)
+      keyEquivalent:@""];
+  [formatActiveFileItem setTarget:self];
+  [self.formatMenu addItem:formatActiveFileItem];
+
+  NSMenuItem *formatSelectedFilesItem = [[NSMenuItem alloc]
+      initWithTitle:NSLocalizedString(@"Format selected files", nil)
+             action:@selector(formatSelectedFiles:)
+      keyEquivalent:@""];
+  [formatSelectedFilesItem setTarget:self];
+//  [self.formatMenu addItem:formatSelectedFilesItem];
+
+  [self.formatMenu addItem:[NSMenuItem separatorItem]];
+
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
+   {
+    if ([format isEqualToString:[self style]])
+      format = [format stringByAppendingString:@" 👈"];
+
+    NSMenuItem *menuItem = [[NSMenuItem alloc]
+        initWithTitle:format
+               action:@selector(setDefaultFormatWithMenuItem:)
+        keyEquivalent:@""];
+    [menuItem setTarget:self];
+    [self.formatMenu addItem:menuItem];
+  }];
+}
 
 - (void)setupMenuItems {
   NSMenuItem *menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
@@ -88,26 +144,17 @@ static TRVSClangFormat *sharedPlugin;
                           keyEquivalent:@""];
   [[menuItem submenu] addItem:actionMenuItem];
 
-  NSMenu *formatMenu =
+  self.formatMenu =
       [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Clang Format", nil)];
-
-  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
-  {
-    NSMenuItem *menuItem =
-        [[NSMenuItem alloc] initWithTitle:format
-                                   action:@selector(formatWithStyle:)
-                            keyEquivalent:@""];
-    [menuItem setTarget:self];
-    [formatMenu addItem:menuItem];
-  }];
-
-  [actionMenuItem setSubmenu:formatMenu];
+  [self addFormatMenuItemsToFormatMenu];
+  [actionMenuItem setSubmenu:self.formatMenu];
 }
 
-- (void)formatWithStyle:(NSMenuItem *)menuItem {
+- (void)formatWithStyle:(NSString *)style {
   NSTask *task = [[NSTask alloc] init];
   [task setLaunchPath:[self.bundle pathForResource:@"clang-format" ofType:nil]];
-  [task setArguments:[self argumentsWithStyle:menuItem.title]];
+  [task setArguments:[self taskArgumentsWithStyle:style]];
+  
   NSPipe *pipe = [NSPipe pipe];
   [task setStandardOutput:pipe];
   [[NSNotificationCenter defaultCenter]
@@ -116,16 +163,38 @@ static TRVSClangFormat *sharedPlugin;
              name:NSFileHandleReadToEndOfFileCompletionNotification
            object:[pipe fileHandleForReading]];
   [[pipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
+  
   [task launch];
 }
 
-#pragma mark - Private
+- (NSString *)style {
+  if (_style)
+    return _style;
+
+  CFPropertyListRef value =
+      CFPreferencesCopyValue((__bridge CFStringRef)([self styleKey]),
+                             (__bridge CFStringRef)(self.bundle.bundleIdentifier),
+                             kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+
+  if (value != NULL) {
+    _style = (__bridge NSString *)(value);
+    CFRelease(value);
+  } else {
+    _style = [[[self styles] firstObject] copy];
+  }
+
+  return _style;
+}
+
+- (NSString *)styleKey {
+  return [self.bundle.bundleIdentifier stringByAppendingString:@".format"];
+}
 
 - (NSArray *)styles {
   return @[ @"LLVM", @"Google", @"Chromium", @"Mozilla", @"WebKit", @"File" ];
 }
 
-- (NSArray *)argumentsWithStyle:(NSString *)style {
+- (NSArray *)taskArgumentsWithStyle:(NSString *)style {
   NSMutableArray *arguments = [[NSMutableArray alloc] init];
   [arguments addObject:[NSString stringWithFormat:@"--style=%@", style]];
   [arguments addObject:[[self documentURL] path]];
