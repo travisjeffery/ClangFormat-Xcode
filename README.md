@@ -20,7 +20,7 @@ If you have selected a range(s) of text, only that text will be formatted, other
 
 By using Clang Format > File in the plug-in menu, Clang will look for the nearest `.clang-format` file from the input file. Most likely, you'll have a .clang-format file at the root of your project.
 
-[Here are the options for .clang-format and how to write it](http://clang.llvm.org/docs/ClangFormatStyleOptions.html).
+[Here are the options for .clang-format and how they're configured](http://clang.llvm.org/docs/ClangFormatStyleOptions.html).
 
 If one of the built-in styles is close to what you want, you can bootstrap your own configuration with:
 
