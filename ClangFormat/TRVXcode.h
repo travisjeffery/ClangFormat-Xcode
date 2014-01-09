@@ -121,10 +121,11 @@
 @property (readonly) IDEWorkspace *workspace;
 @end
 
-@interface TRVSIDE : NSObject
+@interface TRVXcode : NSObject
 + (IDEWorkspaceDocument *)workspaceDocument;
 + (IDESourceCodeDocument *)sourceCodeDocument;
 + (NSTextView *)textView;
 + (BOOL)hasSelection;
 + (void)replaceTextWithString:(NSString *)string;
++ (NSArray *)selectedFileNavigableItems;
 @end
