@@ -65,15 +65,6 @@
   return [[self textView] selectedRange].length > 0;
 }
 
-+ (void)replaceTextWithString:(NSString *)string {
-  NSTextView *textView = [self textView];
-  NSRect visibleRect = [textView visibleRect];
-  NSRange selectedRange = NSMakeRange([textView selectedRange].location, 0);
-  [textView insertText:string replacementRange:[self wholeRange]];
-  [textView scrollRectToVisible:visibleRect];
-  [textView setSelectedRange:selectedRange];
-}
-
 + (NSRange)wholeRange {
   return NSMakeRange(0, [[[self textView] textStorage] length]);
 }

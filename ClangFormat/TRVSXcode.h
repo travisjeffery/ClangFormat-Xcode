@@ -128,7 +128,6 @@
 + (NSTextView *)textView;
 + (BOOL)hasSelection;
 + (NSRange)wholeRange;
-+ (void)replaceTextWithString:(NSString *)string;
 + (NSArray *)selectedFileNavigableItems;
 
 @end
