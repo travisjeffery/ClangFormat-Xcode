@@ -8,22 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		320B996E187C1293003DB7B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320B996D187C1293003DB7B3 /* Cocoa.framework */; };
-		3289FAA9187EC368002499AC /* TRVSFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3289FAA8187EC368002499AC /* TRVSFormatter.m */; };
-		32A11756187C351900923668 /* TRVSXcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A11755187C351900923668 /* TRVSXcode.m */; };
 		32A57EE8187C05A4002DEC9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A57EE7187C05A4002DEC9D /* Foundation.framework */; };
 		32A57EEE187C05A4002DEC9D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A57EEC187C05A4002DEC9D /* InfoPlist.strings */; };
 		32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */; };
-		32B4233C187EABD500F7D068 /* TRVSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B4233B187EABD500F7D068 /* TRVSPreferences.m */; };
+		32ABEDCA187EF90500D4E980 /* TRVSXcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDC9187EF90500D4E980 /* TRVSXcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		32ABEDD0187EF98400D4E980 /* DVTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32ABEDCE187EF98400D4E980 /* DVTFoundation.framework */; };
+		32ABEDD1187EF98400D4E980 /* DVTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32ABEDCF187EF98400D4E980 /* DVTKit.framework */; };
+		32ABEDD4187EF9A600D4E980 /* IDEFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32ABEDD2187EF9A600D4E980 /* IDEFoundation.framework */; };
+		32ABEDD5187EF9A600D4E980 /* IDEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32ABEDD3187EF9A600D4E980 /* IDEKit.framework */; };
+		32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDD9187EFA4F00D4E980 /* TRVSFormatter.m */; };
+		32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */; };
 		32D2236C187C28E1008D12A3 /* clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 32D2236B187C28E1008D12A3 /* clang-format */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		320B996D187C1293003DB7B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		320B996F187C1777003DB7B3 /* TRVSXcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSXcode.h; sourceTree = "<group>"; };
-		3289FAA6187EB288002499AC /* TRVSPrivateXcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSPrivateXcode.h; sourceTree = "<group>"; };
-		3289FAA7187EC368002499AC /* TRVSFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSFormatter.h; sourceTree = "<group>"; };
-		3289FAA8187EC368002499AC /* TRVSFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSFormatter.m; sourceTree = "<group>"; };
-		32A11755187C351900923668 /* TRVSXcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSXcode.m; sourceTree = "<group>"; };
 		32A57EE2187C05A4002DEC9D /* ClangFormat.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClangFormat.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A57EE5187C05A4002DEC9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		32A57EE7187C05A4002DEC9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -32,8 +31,16 @@
 		32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSClangFormat.h; sourceTree = "<group>"; };
 		32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TRVSClangFormat.m; sourceTree = "<group>"; };
 		32A57EF2187C05A4002DEC9D /* ClangFormat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClangFormat-Prefix.pch"; sourceTree = "<group>"; };
-		32B4233A187EABD500F7D068 /* TRVSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSPreferences.h; sourceTree = "<group>"; };
-		32B4233B187EABD500F7D068 /* TRVSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSPreferences.m; sourceTree = "<group>"; };
+		32ABEDC8187EF90500D4E980 /* TRVSXcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSXcode.h; sourceTree = "<group>"; };
+		32ABEDC9187EF90500D4E980 /* TRVSXcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSXcode.m; sourceTree = "<group>"; };
+		32ABEDCE187EF98400D4E980 /* DVTFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTFoundation.framework; path = ../../../../../Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework; sourceTree = "<group>"; };
+		32ABEDCF187EF98400D4E980 /* DVTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTKit.framework; path = ../../../../../Applications/Xcode.app/Contents/SharedFrameworks/DVTKit.framework; sourceTree = "<group>"; };
+		32ABEDD2187EF9A600D4E980 /* IDEFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEFoundation.framework; path = ../../../../../Applications/Xcode.app/Contents/Frameworks/IDEFoundation.framework; sourceTree = "<group>"; };
+		32ABEDD3187EF9A600D4E980 /* IDEKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEKit.framework; path = ../../../../../Applications/Xcode.app/Contents/Frameworks/IDEKit.framework; sourceTree = "<group>"; };
+		32ABEDD8187EFA4F00D4E980 /* TRVSFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSFormatter.h; sourceTree = "<group>"; };
+		32ABEDD9187EFA4F00D4E980 /* TRVSFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSFormatter.m; sourceTree = "<group>"; };
+		32ABEDDA187EFA4F00D4E980 /* TRVSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSPreferences.h; sourceTree = "<group>"; };
+		32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSPreferences.m; sourceTree = "<group>"; };
 		32D22368187C28DC008D12A3 /* ClangFormat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ClangFormat.xcodeproj; sourceTree = SOURCE_ROOT; };
 		32D2236B187C28E1008D12A3 /* clang-format */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "clang-format"; path = "bin/clang-format"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -45,21 +52,16 @@
 			files = (
 				320B996E187C1293003DB7B3 /* Cocoa.framework in Frameworks */,
 				32A57EE8187C05A4002DEC9D /* Foundation.framework in Frameworks */,
+				32ABEDD4187EF9A600D4E980 /* IDEFoundation.framework in Frameworks */,
+				32ABEDD5187EF9A600D4E980 /* IDEKit.framework in Frameworks */,
+				32ABEDD0187EF98400D4E980 /* DVTFoundation.framework in Frameworks */,
+				32ABEDD1187EF98400D4E980 /* DVTKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3289FAAA187EC36E002499AC /* TRVSPreferences */ = {
-			isa = PBXGroup;
-			children = (
-				32B4233A187EABD500F7D068 /* TRVSPreferences.h */,
-				32B4233B187EABD500F7D068 /* TRVSPreferences.m */,
-			);
-			name = TRVSPreferences;
-			sourceTree = "<group>";
-		};
 		32A57ED9187C05A4002DEC9D = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +82,10 @@
 		32A57EE4187C05A4002DEC9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32ABEDD2187EF9A600D4E980 /* IDEFoundation.framework */,
+				32ABEDD3187EF9A600D4E980 /* IDEKit.framework */,
+				32ABEDCE187EF98400D4E980 /* DVTFoundation.framework */,
+				32ABEDCF187EF98400D4E980 /* DVTKit.framework */,
 				320B996D187C1293003DB7B3 /* Cocoa.framework */,
 				32A57EE5187C05A4002DEC9D /* AppKit.framework */,
 				32A57EE7187C05A4002DEC9D /* Foundation.framework */,
@@ -92,12 +98,12 @@
 			children = (
 				32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */,
 				32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */,
-				3289FAA6187EB288002499AC /* TRVSPrivateXcode.h */,
-				3289FAA7187EC368002499AC /* TRVSFormatter.h */,
-				3289FAA8187EC368002499AC /* TRVSFormatter.m */,
-				320B996F187C1777003DB7B3 /* TRVSXcode.h */,
-				32A11755187C351900923668 /* TRVSXcode.m */,
-				3289FAAA187EC36E002499AC /* TRVSPreferences */,
+				32ABEDD8187EFA4F00D4E980 /* TRVSFormatter.h */,
+				32ABEDD9187EFA4F00D4E980 /* TRVSFormatter.m */,
+				32ABEDDA187EFA4F00D4E980 /* TRVSPreferences.h */,
+				32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */,
+				32ABEDC8187EF90500D4E980 /* TRVSXcode.h */,
+				32ABEDC9187EF90500D4E980 /* TRVSXcode.m */,
 				32A57EEA187C05A4002DEC9D /* Supporting Files */,
 			);
 			path = ClangFormat;
@@ -189,10 +195,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32B4233C187EABD500F7D068 /* TRVSPreferences.m in Sources */,
-				3289FAA9187EC368002499AC /* TRVSFormatter.m in Sources */,
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
-				32A11756187C351900923668 /* TRVSXcode.m in Sources */,
+				32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */,
+				32ABEDCA187EF90500D4E980 /* TRVSXcode.m in Sources */,
+				32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +290,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(HOME)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/SharedFrameworks",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Frameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ClangFormat/ClangFormat-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -305,6 +316,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DSTROOT = "$(HOME)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/SharedFrameworks",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Frameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ClangFormat/ClangFormat-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

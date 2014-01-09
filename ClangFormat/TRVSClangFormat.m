@@ -7,7 +7,6 @@
 //
 
 #import "TRVSClangFormat.h"
-#import "TRVSXcode.h"
 #import "TRVSPreferences.h"
 #import "TRVSFormatter.h"
 
@@ -44,9 +43,10 @@ static TRVSClangFormat *sharedPlugin;
   self.preferences = [[TRVSPreferences alloc]
       initWithApplicationID:self.bundle.bundleIdentifier];
   NSString *style = [self.preferences objectForKey:[self stylePreferencesKey]]
-  ?: [[self styles] firstObject];
+                            ?: [[self styles] firstObject];
   self.formatter = [[TRVSFormatter alloc] initWithStyle:style];
-  self.formatter.executablePath = [self.bundle pathForResource:@"clang-format" ofType:@""];
+  self.formatter.executablePath =
+      [self.bundle pathForResource:@"clang-format" ofType:@""];
 
   [self addMenuItemsToMenu];
 
@@ -104,7 +104,7 @@ static TRVSClangFormat *sharedPlugin;
   [self.formatMenu addItem:[NSMenuItem separatorItem]];
 
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
-  {
+   {
     if ([format isEqualToString:self.formatter.style])
       format = [format stringByAppendingString:@" 👈"];
 

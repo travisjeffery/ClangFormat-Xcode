@@ -13,4 +13,3 @@
 @interface TRVSClangFormat : NSObject
 
 @end
-

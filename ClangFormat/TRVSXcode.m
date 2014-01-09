@@ -1,9 +1,9 @@
 //
-//  TRVSIDE.m
-//  ClangFormat
+//  BBXcode.m
+//  BBUncrustifyPlugin
 //
-//  Created by Travis Jeffery on 1/7/14.
-//  Copyright (c) 2014 Travis Jeffery. All rights reserved.
+//  Created by Benoît on 16/03/13.
+//
 //
 
 #import "TRVSXcode.h"
@@ -69,8 +69,7 @@
   NSTextView *textView = [self textView];
   NSRect visibleRect = [textView visibleRect];
   NSRange selectedRange = NSMakeRange([textView selectedRange].location, 0);
-  [textView insertText:string
-      replacementRange:[self wholeRange]];
+  [textView insertText:string replacementRange:[self wholeRange]];
   [textView scrollRectToVisible:visibleRect];
   [textView setSelectedRange:selectedRange];
 }
@@ -98,7 +97,7 @@
   NSMutableArray *array = [NSMutableArray array];
 
   [[currentNavigator selectedObjects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-  {
+   {
     if (![obj isKindOfClass:NSClassFromString(@"IDEFileNavigableItem")])
       return;
 
