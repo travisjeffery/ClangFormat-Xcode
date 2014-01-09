@@ -9,12 +9,13 @@
 #import <Cocoa/Cocoa.h>
 #import "TRVSPrivateXcode.h"
 
-@interface TRVXcode : NSObject
+@interface TRVSXcode : NSObject
 
 + (IDEWorkspaceDocument *)workspaceDocument;
 + (IDESourceCodeDocument *)sourceCodeDocument;
 + (NSTextView *)textView;
 + (BOOL)hasSelection;
++ (NSRange)wholeRange;
 + (void)replaceTextWithString:(NSString *)string;
 + (NSArray *)selectedFileNavigableItems;
 

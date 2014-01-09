@@ -7,8 +7,9 @@
 //
 
 #import "TRVSClangFormat.h"
-#import "TRVXcode.h"
+#import "TRVSXcode.h"
 #import "TRVSPreferences.h"
+#import "TRVSFormatter.h"
 
 static TRVSClangFormat *sharedPlugin;
 
@@ -17,8 +18,8 @@ static TRVSClangFormat *sharedPlugin;
 @property(nonatomic, strong) NSBundle *bundle;
 @property(nonatomic, strong) NSWindow *window;
 @property(nonatomic, strong) NSMenu *formatMenu;
-@property(nonatomic, copy) NSString *style;
 @property(nonatomic, strong) TRVSPreferences *preferences;
+@property(nonatomic, strong) TRVSFormatter *formatter;
 
 @end
 
@@ -42,6 +43,10 @@ static TRVSClangFormat *sharedPlugin;
   self.bundle = plugin;
   self.preferences = [[TRVSPreferences alloc]
       initWithApplicationID:self.bundle.bundleIdentifier];
+  NSString *style = [self.preferences objectForKey:[self stylePreferencesKey]]
+  ?: [[self styles] firstObject];
+  self.formatter = [[TRVSFormatter alloc] initWithStyle:style];
+  self.formatter.executablePath = [self.bundle pathForResource:@"clang-format" ofType:@""];
 
   [self addMenuItemsToMenu];
 
@@ -67,35 +72,13 @@ static TRVSClangFormat *sharedPlugin;
   }
 }
 
-- (void)didReadToEndOfFile:(NSNotification *)notification {
-  NSData *data =
-      [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];
-  NSString *string =
-      [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-  [TRVXcode replaceTextWithString:string];
-
-  [[NSNotificationCenter defaultCenter]
-      removeObserver:self
-                name:NSFileHandleReadToEndOfFileCompletionNotification
-              object:[notification object]];
-}
-
 #pragma mark - Actions
-
-- (void)formatActiveFile {
-  [self formatWithStyle:self.style];
-}
-
-- (void)formatSelectedFiles {
-  //
-}
 
 - (void)setStyleToUseFromMenuItem:(NSMenuItem *)menuItem {
   [self.preferences setObject:menuItem.title forKey:[self stylePreferencesKey]];
   [self.preferences synchronize];
 
-  _style = [menuItem.title copy];
+  self.formatter.style = menuItem.title;
 
   [self.formatMenu removeAllItems];
   [self addStyleMenuItemsToSubmenu];
@@ -108,21 +91,21 @@ static TRVSClangFormat *sharedPlugin;
       initWithTitle:NSLocalizedString(@"Format active file", nil)
              action:@selector(formatActiveFile)
       keyEquivalent:@""];
-  [formatActiveFileItem setTarget:self];
+  [formatActiveFileItem setTarget:self.formatter];
   [self.formatMenu addItem:formatActiveFileItem];
 
   NSMenuItem *formatSelectedFilesItem = [[NSMenuItem alloc]
       initWithTitle:NSLocalizedString(@"Format selected files", nil)
              action:@selector(formatSelectedFiles)
       keyEquivalent:@""];
-  [formatSelectedFilesItem setTarget:self];
+  [formatSelectedFilesItem setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedFilesItem];
 
   [self.formatMenu addItem:[NSMenuItem separatorItem]];
 
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
   {
-    if ([format isEqualToString:[self style]])
+    if ([format isEqualToString:self.formatter.style])
       format = [format stringByAppendingString:@" 👈"];
 
     NSMenuItem *menuItem =
@@ -153,91 +136,12 @@ static TRVSClangFormat *sharedPlugin;
   [actionMenuItem setSubmenu:self.formatMenu];
 }
 
-- (void)formatDocument:(NSDocument *)document withStyle:(NSString *)style {
-}
-
-- (void)formatWithStyle:(NSString *)style {
-  NSTask *task = [[NSTask alloc] init];
-  [task setLaunchPath:[self.bundle pathForResource:@"clang-format" ofType:nil]];
-  [task setArguments:[self taskArgumentsWithStyle:style]];
-
-  NSPipe *pipe = [NSPipe pipe];
-  [task setStandardOutput:pipe];
-
-  [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(didReadToEndOfFile:)
-             name:NSFileHandleReadToEndOfFileCompletionNotification
-           object:[pipe fileHandleForReading]];
-
-  [[pipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
-
-  [task launch];
-}
-
-- (NSString *)style {
-  if (_style)
-    return _style;
-
-  _style = [self.preferences objectForKey:[self stylePreferencesKey]]
-                   ?: [[[self styles] firstObject] copy];
-
-  return _style;
-}
-
 - (NSString *)stylePreferencesKey {
   return [self.bundle.bundleIdentifier stringByAppendingString:@".format"];
 }
 
 - (NSArray *)styles {
   return @[ @"LLVM", @"Google", @"Chromium", @"Mozilla", @"WebKit", @"File" ];
-}
-
-- (NSArray *)taskArgumentsWithStyle:(NSString *)style {
-  NSMutableArray *arguments = [[NSMutableArray alloc] init];
-  [arguments addObject:[NSString stringWithFormat:@"--style=%@", style]];
-  [arguments addObject:[[self documentURL] path]];
-  [arguments addObjectsFromArray:[self linesArguments]];
-  return arguments;
-}
-
-- (NSArray *)linesArguments {
-  NSMutableArray *arguments = [[NSMutableArray alloc] init];
-  if (![TRVXcode hasSelection])
-    return arguments;
-
-  NSArray *selectedRanges = [[TRVXcode textView] selectedRanges];
-  DVTSourceTextStorage *textStorage =
-      [[TRVXcode sourceCodeDocument] textStorage];
-
-    [selectedRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
-    {
-      NSRange lineRange =
-          [textStorage lineRangeForCharacterRange:[rangeValue rangeValue]];
-      [arguments addObject:[NSString stringWithFormat:@"--lines=%lu:%lu",
-                                                      lineRange.location + 1,
-                                                      lineRange.location +
-                                                          lineRange.length]];
-    }];
-
-    return arguments;
-}
-
-- (NSURL *)documentURL {
-  __block NSURL *URL = nil;
-  NSArray *windows = [NSClassFromString(@"IDEWorkspaceWindowController")
-      workspaceWindowControllers];
-
-    [windows enumerateObjectsUsingBlock:^(id workspaceWindowController, NSUInteger idx, BOOL *stop)
-    {
-      if ([workspaceWindowController workspaceWindow] == self.window ||
-          windows.count == 1) {
-        NSDocument *document =
-            [[workspaceWindowController editorArea] primaryEditorDocument];
-        URL = [document fileURL];
-      }
-    }];
-    return URL;
 }
 
 @end

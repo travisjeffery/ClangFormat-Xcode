@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+// the central plug-in interface
+
 @interface TRVSClangFormat : NSObject
 
 @end
