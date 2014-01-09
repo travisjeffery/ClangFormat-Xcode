@@ -19,6 +19,7 @@
 /* Begin PBXFileReference section */
 		320B996D187C1293003DB7B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		320B996F187C1777003DB7B3 /* TRVXcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVXcode.h; sourceTree = "<group>"; };
+		3289FAA6187EB288002499AC /* TRVSPrivateXcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSPrivateXcode.h; sourceTree = "<group>"; };
 		32A11755187C351900923668 /* TRVXcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVXcode.m; sourceTree = "<group>"; };
 		32A57EE2187C05A4002DEC9D /* ClangFormat.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClangFormat.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A57EE5187C05A4002DEC9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -79,6 +80,7 @@
 			children = (
 				32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */,
 				32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */,
+				3289FAA6187EB288002499AC /* TRVSPrivateXcode.h */,
 				320B996F187C1777003DB7B3 /* TRVXcode.h */,
 				32A11755187C351900923668 /* TRVXcode.m */,
 				32B4233A187EABD500F7D068 /* TRVSPreferences.h */,
