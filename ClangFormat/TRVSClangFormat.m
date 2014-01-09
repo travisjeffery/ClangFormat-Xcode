@@ -102,9 +102,15 @@ static TRVSClangFormat *sharedPlugin;
   [self.formatMenu addItem:formatSelectedFilesItem];
 
   [self.formatMenu addItem:[NSMenuItem separatorItem]];
+  
+  NSMenuItem *styleMenuItem =
+      [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Format style:", nil)
+                                 action:NULL
+                          keyEquivalent:@""];
+  [self.formatMenu addItem:styleMenuItem];
 
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
-   {
+  {
     if ([format isEqualToString:self.formatter.style])
       format = [format stringByAppendingString:@" 👈"];
 
