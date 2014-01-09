@@ -10,7 +10,7 @@ Clone this repo, build and run ClangFormat, restart Xcode.
 
 ## Usage:
 
-Menu > Edit > Clang Format > Pick a style.
+![usage](https://raw.github.com/travisjeffery/ClangFormat-Xcode/master/README/usage.png)
 
 ![demo](https://raw.github.com/travisjeffery/ClangFormat-Xcode/master/README/clangformat-xcode-demo.gif)
 
