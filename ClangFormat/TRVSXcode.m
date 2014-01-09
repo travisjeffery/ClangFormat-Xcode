@@ -1,9 +1,9 @@
 //
-//  BBXcode.m
-//  BBUncrustifyPlugin
+//  TRVSXcode.m
+//  ClangFormat
 //
-//  Created by Benoît on 16/03/13.
-//
+//  Created by Travis Jeffery on 1/9/14.
+//  Copyright (c) 2014 Travis Jeffery. All rights reserved.
 //
 
 #import "TRVSXcode.h"

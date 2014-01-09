@@ -8,20 +8,7 @@
 
 #import "TRVSFormatter.h"
 #import "TRVSXcode.h"
-
-@interface TRVSCodeFragment : NSObject
-
-@property(nonatomic, copy) NSString *string;
-@property(nonatomic, copy) NSString *formattedString;
-@property(nonatomic) NSRange range;
-@property(nonatomic, strong) NSURL *fileURL;
-@property(nonatomic, strong) TRVSFormatter *formatter;
-
-@end
-
-@implementation TRVSCodeFragment
-
-@end
+#import "TRVSCodeFragment.h"
 
 @implementation TRVSFormatter
 
