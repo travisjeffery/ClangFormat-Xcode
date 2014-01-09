@@ -102,7 +102,7 @@ static TRVSClangFormat *sharedPlugin;
   [self.formatMenu addItem:formatSelectedFilesItem];
 
   [self.formatMenu addItem:[NSMenuItem separatorItem]];
-  
+
   NSMenuItem *styleMenuItem =
       [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Format style:", nil)
                                  action:NULL

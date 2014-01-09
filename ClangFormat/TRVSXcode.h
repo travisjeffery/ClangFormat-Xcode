@@ -101,7 +101,7 @@
 
 @interface IDEEditorContext : NSObject
 - (id)editor;  // returns the current editor. If the editor is the code editor,
-               // the class is `IDESourceCodeEditor`
+// the class is `IDESourceCodeEditor`
 @end
 
 @interface IDEEditorArea : NSObject

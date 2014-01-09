@@ -48,7 +48,8 @@
 - (void)formatSelectedFiles {
   NSArray *fileNavigableItems = [TRVSXcode selectedFileNavigableItems];
 
-  [fileNavigableItems enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop) {
+  [fileNavigableItems enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop)
+  {
     NSDocument *document = [IDEDocumentController
         retainedEditorDocumentForNavigableItem:fileNavigableItem
                                          error:nil];
@@ -75,7 +76,8 @@
 
   NSMutableArray *lineRanges = [[NSMutableArray alloc] init];
 
-  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     [lineRanges
         addObject:
             [NSValue valueWithRange:[textStorage lineRangeForCharacterRange:
@@ -87,7 +89,8 @@
 
   NSMutableArray *fragments = [[NSMutableArray alloc] init];
 
-  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     NSRange lineRange = [rangeValue rangeValue];
     NSRange characterRange = [textStorage characterRangeForLineRange:lineRange];
 
@@ -121,7 +124,8 @@
 
   NSMutableArray *selectionRanges = [[NSMutableArray alloc] init];
 
-  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment, NSUInteger idx, BOOL *stop) {
+  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment, NSUInteger idx, BOOL *stop)
+  {
     [textStorage beginEditing];
     [textStorage replaceCharactersInRange:fragment.range
                                withString:fragment.formattedString
@@ -152,13 +156,15 @@
 - (NSArray *)continuousLinesRangeForRanges:(NSArray *)ranges {
   NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
 
-  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     [indexSet addIndexesInRange:[rangeValue rangeValue]];
   }];
 
   NSMutableArray *continuousRanges = [[NSMutableArray alloc] init];
 
-  [indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+  [indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop)
+  {
     [continuousRanges addObject:[NSValue valueWithRange:range]];
   }];
 
@@ -166,7 +172,8 @@
 }
 
 - (void)formatFilesAtURLs:(NSArray *)fileURLs {
-  [fileURLs enumerateObjectsUsingBlock:^(NSURL *URL, NSUInteger idx, BOOL *stop) {
+  [fileURLs enumerateObjectsUsingBlock:^(NSURL *URL, NSUInteger idx, BOOL *stop)
+  {
     if (![[NSFileManager defaultManager] fileExistsAtPath:URL.path])
       return;
 

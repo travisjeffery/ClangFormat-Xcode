@@ -88,7 +88,7 @@
   NSMutableArray *array = [NSMutableArray array];
 
   [[currentNavigator selectedObjects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-   {
+  {
     if (![obj isKindOfClass:NSClassFromString(@"IDEFileNavigableItem")])
       return;
 
