@@ -8,6 +8,7 @@
 
 #import "TRVSClangFormat.h"
 #import "TRVSIDE.h"
+#import "TRVSPreferences.h"
 
 static TRVSClangFormat *sharedPlugin;
 
@@ -17,6 +18,7 @@ static TRVSClangFormat *sharedPlugin;
 @property(nonatomic, strong) NSWindow *window;
 @property(nonatomic, strong) NSMenu *formatMenu;
 @property(nonatomic, copy) NSString *style;
+@property (nonatomic, strong) TRVSPreferences *preferences;
 
 @end
 
@@ -40,6 +42,7 @@ static TRVSClangFormat *sharedPlugin;
   self.bundle = plugin;
   
   NSLog(@"bundle id %@", self.bundle.bundleIdentifier);
+    self.preferences = [[TRVSPreferences alloc] initWithApplicationID:self.bundle.bundleIdentifier];
 
   [self setupMenuItems];
 
@@ -86,16 +89,14 @@ static TRVSClangFormat *sharedPlugin;
 - (void)formatSelectedFiles:(id)sender {
 }
 
-- (void)setDefaultFormatWithMenuItem:(NSMenuItem *)menuItem {
-  CFPreferencesSetValue((__bridge CFStringRef)([self styleKey]),
-                        (__bridge CFPropertyListRef)(menuItem.title),
-                        (__bridge CFStringRef)(self.bundle.bundleIdentifier),
-                        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-  CFPreferencesSynchronize(CFSTR("com.travisjeffery.ClangFormat"),
-                           kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-  _style = [menuItem.title copy];
-  [self.formatMenu removeAllItems];
-  [self addFormatMenuItemsToFormatMenu];
+- (void)setStyleToUseFromMenuItem:(NSMenuItem *)menuItem {
+    [self.preferences setObject:menuItem.title forKey:[self stylePreferencesKey]];
+    [self.preferences synchronize];
+    
+    _style = [menuItem.title copy];
+    
+    [self.formatMenu removeAllItems];
+    [self addStyleMenuItemsToSubmenu];
 }
 
 #pragma mark - Private
@@ -171,17 +172,8 @@ static TRVSClangFormat *sharedPlugin;
   if (_style)
     return _style;
 
-  CFPropertyListRef value =
-      CFPreferencesCopyValue((__bridge CFStringRef)([self styleKey]),
-                             (__bridge CFStringRef)(self.bundle.bundleIdentifier),
-                             kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+    _style = [self.preferences objectForKey:[self stylePreferencesKey]] ?: [[[self styles] firstObject] copy];
 
-  if (value != NULL) {
-    _style = (__bridge NSString *)(value);
-    CFRelease(value);
-  } else {
-    _style = [[[self styles] firstObject] copy];
-  }
 
   return _style;
 }
