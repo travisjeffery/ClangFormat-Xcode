@@ -8,17 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		320B996E187C1293003DB7B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320B996D187C1293003DB7B3 /* Cocoa.framework */; };
-		32A11756187C351900923668 /* TRVSIDE.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A11755187C351900923668 /* TRVSIDE.m */; };
+		32A11756187C351900923668 /* TRVXcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A11755187C351900923668 /* TRVXcode.m */; };
 		32A57EE8187C05A4002DEC9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A57EE7187C05A4002DEC9D /* Foundation.framework */; };
 		32A57EEE187C05A4002DEC9D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A57EEC187C05A4002DEC9D /* InfoPlist.strings */; };
 		32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */; };
+		32B4233C187EABD500F7D068 /* TRVSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B4233B187EABD500F7D068 /* TRVSPreferences.m */; };
 		32D2236C187C28E1008D12A3 /* clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 32D2236B187C28E1008D12A3 /* clang-format */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		320B996D187C1293003DB7B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		320B996F187C1777003DB7B3 /* TRVSIDE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSIDE.h; sourceTree = "<group>"; };
-		32A11755187C351900923668 /* TRVSIDE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSIDE.m; sourceTree = "<group>"; };
+		320B996F187C1777003DB7B3 /* TRVXcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVXcode.h; sourceTree = "<group>"; };
+		32A11755187C351900923668 /* TRVXcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVXcode.m; sourceTree = "<group>"; };
 		32A57EE2187C05A4002DEC9D /* ClangFormat.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClangFormat.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A57EE5187C05A4002DEC9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		32A57EE7187C05A4002DEC9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -27,6 +28,8 @@
 		32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TRVSClangFormat.h; sourceTree = "<group>"; };
 		32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TRVSClangFormat.m; sourceTree = "<group>"; };
 		32A57EF2187C05A4002DEC9D /* ClangFormat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ClangFormat-Prefix.pch"; sourceTree = "<group>"; };
+		32B4233A187EABD500F7D068 /* TRVSPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSPreferences.h; sourceTree = "<group>"; };
+		32B4233B187EABD500F7D068 /* TRVSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSPreferences.m; sourceTree = "<group>"; };
 		32D22368187C28DC008D12A3 /* ClangFormat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ClangFormat.xcodeproj; sourceTree = SOURCE_ROOT; };
 		32D2236B187C28E1008D12A3 /* clang-format */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "clang-format"; path = "bin/clang-format"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -76,8 +79,10 @@
 			children = (
 				32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */,
 				32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */,
-				320B996F187C1777003DB7B3 /* TRVSIDE.h */,
-				32A11755187C351900923668 /* TRVSIDE.m */,
+				320B996F187C1777003DB7B3 /* TRVXcode.h */,
+				32A11755187C351900923668 /* TRVXcode.m */,
+				32B4233A187EABD500F7D068 /* TRVSPreferences.h */,
+				32B4233B187EABD500F7D068 /* TRVSPreferences.m */,
 				32A57EEA187C05A4002DEC9D /* Supporting Files */,
 			);
 			path = ClangFormat;
@@ -169,8 +174,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32B4233C187EABD500F7D068 /* TRVSPreferences.m in Sources */,
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
-				32A11756187C351900923668 /* TRVSIDE.m in Sources */,
+				32A11756187C351900923668 /* TRVXcode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
