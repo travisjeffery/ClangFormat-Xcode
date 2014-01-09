@@ -10,7 +10,7 @@
 
 @interface TRVSPreferences ()
 
-@property(nonatomic, copy) NSString* applicationID;
+@property(nonatomic, copy) NSString *applicationID;
 
 @end
 
@@ -18,43 +18,45 @@
 
 #pragma mark - Designated Initializer
 
-- (instancetype)initWithApplicationID:(NSString*)applicationID {
-    self = [super init];
+- (instancetype)initWithApplicationID:(NSString *)applicationID {
+  self = [super init];
 
-    if (self) {
-        self.applicationID = applicationID;
-    }
+  if (self) {
+    self.applicationID = applicationID;
+  }
 
-    return self;
+  return self;
 }
 
-- (id)objectForKey:(NSString*)key {
-    CFPropertyListRef value = CFPreferencesCopyValue(
-        (__bridge CFStringRef)key,
-        (__bridge CFStringRef)self.applicationID,
-        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-    
-    id object = nil;
+- (id)objectForKey:(NSString *)key {
+  CFPropertyListRef value =
+      CFPreferencesCopyValue((__bridge CFStringRef)key,
+                             (__bridge CFStringRef)self.applicationID,
+                             kCFPreferencesCurrentUser,
+                             kCFPreferencesAnyHost);
 
-    if (value != NULL) {
-        object = (__bridge id)value;
-        CFRelease(value);
-    }
+  id object = nil;
 
-    return object;
+  if (value != NULL) {
+    object = (__bridge id)value;
+    CFRelease(value);
+  }
+
+  return object;
 }
 
-- (void)setObject:(id)object forKey:(NSString*)key {
-    CFPreferencesSetValue((__bridge CFStringRef)key,
-                          (__bridge CFPropertyListRef)object,
-                          (__bridge CFStringRef)self.applicationID,
-                          kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+- (void)setObject:(id)object forKey:(NSString *)key {
+  CFPreferencesSetValue((__bridge CFStringRef)key,
+                        (__bridge CFPropertyListRef)object,
+                        (__bridge CFStringRef)self.applicationID,
+                        kCFPreferencesCurrentUser,
+                        kCFPreferencesAnyHost);
 }
 
 - (BOOL)synchronize {
-    return CFPreferencesSynchronize(
-        (__bridge CFStringRef)self.applicationID,
-        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  return CFPreferencesSynchronize((__bridge CFStringRef)self.applicationID,
+                                  kCFPreferencesCurrentUser,
+                                  kCFPreferencesAnyHost);
 }
 
 @end

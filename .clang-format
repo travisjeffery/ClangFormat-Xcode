@@ -1,5 +1,5 @@
 ---
-BasedOnStyle:  Webkit
-BreakBeforeBraces: Attach
+BasedOnStyle:  Chromium
+PointerBindsToType: false
 ...
 
