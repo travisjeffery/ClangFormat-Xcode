@@ -43,9 +43,9 @@ static TRVSClangFormat *sharedPlugin;
       initWithApplicationID:self.bundle.bundleIdentifier];
   NSString *style = [self.preferences objectForKey:[self stylePreferencesKey]]
                             ?: [[self styles] firstObject];
-  self.formatter = [[TRVSFormatter alloc] initWithStyle:style];
-  self.formatter.executablePath =
-      [self.bundle pathForResource:@"clang-format" ofType:@""];
+  self.formatter = [[TRVSFormatter alloc]
+       initWithStyle:style
+      executablePath:[self.bundle pathForResource:@"clang-format" ofType:@""]];
 
   [self addMenuItemsToMenu];
 
@@ -74,6 +74,13 @@ static TRVSClangFormat *sharedPlugin;
   [formatActiveFileItem setTarget:self.formatter];
   [self.formatMenu addItem:formatActiveFileItem];
 
+  NSMenuItem *formatSelectedCharacters = [[NSMenuItem alloc]
+      initWithTitle:NSLocalizedString(@"Format selected characters", nil)
+             action:@selector(formatSelectedCharacters)
+      keyEquivalent:@""];
+  [formatSelectedCharacters setTarget:self.formatter];
+  [self.formatMenu addItem:formatSelectedCharacters];
+
   NSMenuItem *formatSelectedFilesItem = [[NSMenuItem alloc]
       initWithTitle:NSLocalizedString(@"Format selected files", nil)
              action:@selector(formatSelectedFiles)
@@ -91,16 +98,20 @@ static TRVSClangFormat *sharedPlugin;
 
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
   {
-    if ([format isEqualToString:self.formatter.style])
-      format = [format stringByAppendingString:@" 👈"];
-
-    NSMenuItem *menuItem =
-        [[NSMenuItem alloc] initWithTitle:format
-                                   action:@selector(setStyleToUseFromMenuItem:)
-                            keyEquivalent:@""];
-    [menuItem setTarget:self];
-    [self.formatMenu addItem:menuItem];
+    [self addMenuItemWithStyle:format];
   }];
+}
+
+- (void)addMenuItemWithStyle:(NSString *)style {
+  if ([style isEqualToString:self.formatter.style])
+    style = [style stringByAppendingString:@" 👈"];
+
+  NSMenuItem *menuItem =
+      [[NSMenuItem alloc] initWithTitle:style
+                                 action:@selector(setStyleToUseFromMenuItem:)
+                          keyEquivalent:@""];
+  [menuItem setTarget:self];
+  [self.formatMenu addItem:menuItem];
 }
 
 - (void)addMenuItemsToMenu {

@@ -12,31 +12,37 @@
 
 @implementation TRVSFormatter
 
-- (instancetype)initWithStyle:(NSString *)style {
+- (instancetype)initWithStyle:(NSString *)style
+               executablePath:(NSString *)executablePath {
   self = [self init];
 
   if (self) {
     self.style = style;
+    self.executablePath = executablePath;
   }
 
   return self;
 }
 
 - (void)formatActiveFile {
-  if ([TRVSXcode textViewHasSelection]) {
-    [self formatRanges:[[TRVSXcode textView] selectedRanges]
-            inDocument:[TRVSXcode sourceCodeDocument]];
-  } else {
-    [self formatRanges:
-            @[ [NSValue valueWithRange:[TRVSXcode wholeRangeOfTextView]] ]
-            inDocument:[TRVSXcode sourceCodeDocument]];
-  }
+  [self formatRanges:
+          @[ [NSValue valueWithRange:[TRVSXcode wholeRangeOfTextView]] ]
+          inDocument:[TRVSXcode sourceCodeDocument]];
+}
+
+- (void)formatSelectedCharacters {
+  if (![TRVSXcode textViewHasSelection])
+    return;
+
+  [self formatRanges:[[TRVSXcode textView] selectedRanges]
+          inDocument:[TRVSXcode sourceCodeDocument]];
 }
 
 - (void)formatSelectedFiles {
   NSArray *fileNavigableItems = [TRVSXcode selectedFileNavigableItems];
 
-  [fileNavigableItems enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop) {
+  [fileNavigableItems enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop)
+  {
     NSDocument *document = [IDEDocumentController
         retainedEditorDocumentForNavigableItem:fileNavigableItem
                                          error:NULL];
@@ -89,7 +95,8 @@
                               withDocument:(IDESourceCodeDocument *)document {
   NSMutableArray *selectionRanges = [[NSMutableArray alloc] init];
 
-  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment, NSUInteger idx, BOOL *stop) {
+  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment, NSUInteger idx, BOOL *stop)
+  {
     [textStorage beginEditing];
     [textStorage replaceCharactersInRange:fragment.range
                                withString:fragment.formattedString
@@ -128,7 +135,8 @@
                                 withDocument:(IDESourceCodeDocument *)document {
   NSMutableArray *fragments = [[NSMutableArray alloc] init];
 
-  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     NSRange characterRange =
         [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
 
@@ -157,7 +165,8 @@
                         usingTextStorage:(DVTSourceTextStorage *)textStorage {
   NSMutableArray *lineRanges = [[NSMutableArray alloc] init];
 
-  [characterRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [characterRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     [lineRanges
         addObject:
             [NSValue valueWithRange:[textStorage lineRangeForCharacterRange:
@@ -170,13 +179,15 @@
 - (NSArray *)continuousLineRangesOfRanges:(NSArray *)ranges {
   NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
 
-  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
+  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop)
+  {
     [indexSet addIndexesInRange:[rangeValue rangeValue]];
   }];
 
   NSMutableArray *continuousRanges = [[NSMutableArray alloc] init];
 
-  [indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
+  [indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop)
+  {
     [continuousRanges addObject:[NSValue valueWithRange:range]];
   }];
 
