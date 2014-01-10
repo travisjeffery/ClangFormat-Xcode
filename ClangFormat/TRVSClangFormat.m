@@ -15,7 +15,6 @@ static TRVSClangFormat *sharedPlugin;
 @interface TRVSClangFormat ()
 
 @property(nonatomic, strong) NSBundle *bundle;
-@property(nonatomic, strong) NSWindow *window;
 @property(nonatomic, strong) NSMenu *formatMenu;
 @property(nonatomic, strong) TRVSPreferences *preferences;
 @property(nonatomic, strong) TRVSFormatter *formatter;
@@ -50,26 +49,7 @@ static TRVSClangFormat *sharedPlugin;
 
   [self addMenuItemsToMenu];
 
-  [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(windowDidUpdate:)
-             name:NSWindowDidUpdateNotification
-           object:nil];
-
   return self;
-}
-
-- (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-#pragma mark - Notifications
-
-- (void)windowDidUpdate:(NSNotification *)notification {
-  id window = notification.object;
-  if ([window isKindOfClass:[NSWindow class]] && [window isMainWindow]) {
-    self.window = window;
-  }
 }
 
 #pragma mark - Actions

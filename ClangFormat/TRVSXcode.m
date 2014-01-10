@@ -22,15 +22,6 @@
   return nil;
 }
 
-+ (IDEWorkspaceDocument *)workspaceDocument {
-  if ([self windowController] &&
-      [[[self windowController] document]
-          isKindOfClass:NSClassFromString(@"IDEWorkspaceDocument")]) {
-    return [[self windowController] document];
-  }
-  return nil;
-}
-
 + (IDESourceCodeDocument *)sourceCodeDocument {
   if ([[self currentEditor]
           isKindOfClass:NSClassFromString(@"IDESourceCodeEditor")]) {
@@ -61,11 +52,11 @@
   return nil;
 }
 
-+ (BOOL)hasSelection {
++ (BOOL)textViewHasSelection {
   return [[self textView] selectedRange].length > 0;
 }
 
-+ (NSRange)wholeRange {
++ (NSRange)wholeRangeOfTextView {
   return NSMakeRange(0, [[[self textView] textStorage] length]);
 }
 

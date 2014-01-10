@@ -16,6 +16,5 @@
 - (instancetype)initWithStyle:(NSString *)style;
 - (void)formatActiveFile;
 - (void)formatSelectedFiles;
-- (void)formatFilesAtURLs:(NSArray *)fileURLs;
 
 @end

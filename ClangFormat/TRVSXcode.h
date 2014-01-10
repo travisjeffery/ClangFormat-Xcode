@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+// here be dragons... have to declare these private apis
+
 @interface DVTTextDocumentLocation : NSObject
 @property(readonly) NSRange characterRange;
 @property(readonly) NSRange lineRange;
@@ -123,11 +125,10 @@
 
 @interface TRVSXcode : NSObject
 
-+ (IDEWorkspaceDocument *)workspaceDocument;
 + (IDESourceCodeDocument *)sourceCodeDocument;
 + (NSTextView *)textView;
-+ (BOOL)hasSelection;
-+ (NSRange)wholeRange;
++ (BOOL)textViewHasSelection;
++ (NSRange)wholeRangeOfTextView;
 + (NSArray *)selectedFileNavigableItems;
 
 @end
