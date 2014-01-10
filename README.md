@@ -6,7 +6,12 @@ With [clang-format](http://clang.llvm.org/docs/ClangFormat.html) you can use Cla
 
 ## Installation:
 
+Install via [Alcatraz](https://github.com/mneorr/Alcatraz).
+
+OR
+
 Clone this repo, build and run ClangFormat, restart Xcode.
+
 
 ## Usage:
 
