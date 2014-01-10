@@ -1,6 +1,6 @@
 # ClangFormat-Xcode
 
-An Xcode plug-in to to use clang-format from in Xcode
+An Xcode plug-in to format your code using Clang's format tools, by [@travisjeffery](https://twitter.com/travisjeffery).
 
 With [clang-format](http://clang.llvm.org/docs/ClangFormat.html) you can use Clang to format your code to styles such as LLVM, Google, Chromium, Mozilla, WebKit, or your own configuration.
 
