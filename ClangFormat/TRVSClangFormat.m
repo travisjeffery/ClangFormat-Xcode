@@ -96,8 +96,7 @@ static TRVSClangFormat *sharedPlugin;
                           keyEquivalent:@""];
   [self.formatMenu addItem:styleMenuItem];
 
-  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop)
-  {
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop) {
     [self addMenuItemWithStyle:format];
   }];
 }
