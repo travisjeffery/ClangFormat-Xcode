@@ -9,6 +9,7 @@
 #import "NSDocument+TRVSClangFormat.h"
 #import <objc/runtime.h>
 #import "TRVSFormatter.h"
+#import "TRVSXcode.h"
 
 static BOOL trvs_formatOnSave;
 
@@ -17,7 +18,7 @@ static BOOL trvs_formatOnSave;
 - (void)trvs_saveDocumentWithDelegate:(id)delegate
                       didSaveSelector:(SEL)didSaveSelector
                           contextInfo:(void *)contextInfo {
-  if ([[self class] trvs_formatOnSave])
+  if ([self trvs_shouldFormatBeforeSaving])
     [[TRVSFormatter sharedFormatter]
         formatDocument:(IDESourceCodeDocument *)self];
 
@@ -47,6 +48,11 @@ static BOOL trvs_formatOnSave;
 
 + (BOOL)trvs_formatOnSave {
   return trvs_formatOnSave;
+}
+
+- (BOOL)trvs_shouldFormatBeforeSaving {
+  return [[self class] trvs_formatOnSave] && [TRVSXcode sourceCodeDocument] ==
+                                                 self;
 }
 
 @end
