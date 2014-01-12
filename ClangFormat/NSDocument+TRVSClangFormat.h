@@ -10,4 +10,7 @@
 
 @interface NSDocument (TRVSClangFormat)
 
++ (BOOL)trvs_formatOnSave;
++ (void)settrvs_formatOnSave:(BOOL)formatOnSave;
+
 @end

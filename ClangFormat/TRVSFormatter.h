@@ -14,7 +14,6 @@
 
 @property(nonatomic, copy) NSString *style;
 @property(nonatomic, copy) NSString *executablePath;
-@property(nonatomic) BOOL shouldFormat;
 
 + (instancetype)sharedFormatter;
 - (instancetype)initWithStyle:(NSString *)style

@@ -10,13 +10,25 @@
 #import <objc/runtime.h>
 #import "TRVSFormatter.h"
 
+static BOOL trvs_formatOnSave;
+
 @implementation NSDocument (TRVSClangFormat)
+
++ (void)settrvs_formatOnSave:(BOOL)formatOnSave {
+  trvs_formatOnSave = formatOnSave;
+}
+
++ (BOOL)trvs_formatOnSave {
+  return trvs_formatOnSave;
+}
 
 - (void)trvs_saveDocumentWithDelegate:(id)delegate
                       didSaveSelector:(SEL)didSaveSelector
                           contextInfo:(void *)contextInfo {
-  if ([[TRVSFormatter sharedFormatter] shouldFormat])
-    [[TRVSFormatter sharedFormatter] formatDocument:self];
+  if ([[self class] trvs_formatOnSave])
+    [[TRVSFormatter sharedFormatter]
+        formatDocument:(IDESourceCodeDocument *)self];
+
   [self trvs_saveDocumentWithDelegate:delegate
                       didSaveSelector:didSaveSelector
                           contextInfo:contextInfo];

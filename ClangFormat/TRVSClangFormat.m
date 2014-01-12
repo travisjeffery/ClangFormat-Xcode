@@ -48,7 +48,8 @@ static TRVSClangFormat *sharedPlugin;
   self.formatter.style = style;
   self.formatter.executablePath =
       [self.bundle pathForResource:@"clang-format" ofType:@""];
-  self.formatter.shouldFormat = [self formatOnSave];
+
+  [NSDocument settrvs_formatOnSave:[self formatOnSave]];
 
   [self addMenuItemsToMenu];
 
@@ -158,7 +159,7 @@ static TRVSClangFormat *sharedPlugin;
                        forKey:[self formatOnSavePreferencesKey]];
   [self.preferences synchronize];
 
-  self.formatter.shouldFormat = formatOnSave;
+  [NSDocument settrvs_formatOnSave:formatOnSave];
 
   [self prepareFormatMenu];
 }
