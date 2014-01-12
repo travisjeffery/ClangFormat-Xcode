@@ -74,10 +74,23 @@
 }
 
 - (void)formatDocument:(IDESourceCodeDocument *)document {
-  NSRange wholeRangeOfDocument =
-      NSMakeRange(0, [[document textStorage] length]);
+  NSUInteger location = [[TRVSXcode textView] selectedRange].location;
+  NSUInteger length = [[document textStorage] length];
+  NSRange wholeRangeOfDocument = NSMakeRange(0, length);
+
   [self formatRanges:@[ [NSValue valueWithRange:wholeRangeOfDocument] ]
           inDocument:document];
+
+  NSUInteger diff = labs(length - [[document textStorage] length]);
+
+  if (length > [[document textStorage] length])
+    location -= diff;
+  else
+    location += diff;
+
+  NSRange range = NSMakeRange(location, 0);
+  [[TRVSXcode textView] setSelectedRange:NSMakeRange(location, 0)];
+  [[TRVSXcode textView] scrollRangeToVisible:range];
 }
 
 #pragma mark - Private
