@@ -15,7 +15,8 @@
 - (void)trvs_saveDocumentWithDelegate:(id)delegate
                       didSaveSelector:(SEL)didSaveSelector
                           contextInfo:(void *)contextInfo {
-  [[TRVSFormatter sharedFormatter] formatDocument:self];
+  if ([[TRVSFormatter sharedFormatter] shouldFormat])
+    [[TRVSFormatter sharedFormatter] formatDocument:self];
   [self trvs_saveDocumentWithDelegate:delegate
                       didSaveSelector:didSaveSelector
                           contextInfo:contextInfo];

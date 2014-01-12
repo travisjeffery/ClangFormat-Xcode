@@ -48,6 +48,7 @@ static TRVSClangFormat *sharedPlugin;
   self.formatter.style = style;
   self.formatter.executablePath =
       [self.bundle pathForResource:@"clang-format" ofType:@""];
+  self.formatter.shouldFormat = [self formatOnSave];
 
   [self addMenuItemsToMenu];
 
@@ -62,11 +63,15 @@ static TRVSClangFormat *sharedPlugin;
 
   self.formatter.style = menuItem.title;
 
-  [self.formatMenu removeAllItems];
-  [self addStyleMenuItemsToSubmenu];
+  [self prepareFormatMenu];
 }
 
 #pragma mark - Private
+
+- (void)prepareFormatMenu {
+  [self.formatMenu removeAllItems];
+  [self addStyleMenuItemsToSubmenu];
+}
 
 - (void)addStyleMenuItemsToSubmenu {
   NSMenuItem *formatActiveFileItem = [[NSMenuItem alloc]
@@ -101,6 +106,18 @@ static TRVSClangFormat *sharedPlugin;
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop) {
     [self addMenuItemWithStyle:format];
   }];
+
+  [self.formatMenu addItem:[NSMenuItem separatorItem]];
+
+  NSString *title = NSLocalizedString(@"Format on save", nil);
+  if ([self formatOnSave])
+    title = [title stringByAppendingString:@" ✔︎"];
+  NSMenuItem *toggleFormatOnSaveMenuItem =
+      [[NSMenuItem alloc] initWithTitle:title
+                                 action:@selector(toggleFormatOnSave)
+                          keyEquivalent:@""];
+  [toggleFormatOnSaveMenuItem setTarget:self];
+  [self.formatMenu addItem:toggleFormatOnSaveMenuItem];
 }
 
 - (void)addMenuItemWithStyle:(NSString *)style {
@@ -132,6 +149,28 @@ static TRVSClangFormat *sharedPlugin;
       [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Clang Format", nil)];
   [self addStyleMenuItemsToSubmenu];
   [actionMenuItem setSubmenu:self.formatMenu];
+}
+
+- (void)toggleFormatOnSave {
+  BOOL formatOnSave = ![self formatOnSave];
+
+  [self.preferences setObject:@(formatOnSave)
+                       forKey:[self formatOnSavePreferencesKey]];
+  [self.preferences synchronize];
+
+  self.formatter.shouldFormat = formatOnSave;
+
+  [self prepareFormatMenu];
+}
+
+- (BOOL)formatOnSave {
+  return [[self.preferences
+              objectForKey:[self formatOnSavePreferencesKey]] boolValue];
+}
+
+- (NSString *)formatOnSavePreferencesKey {
+  return
+      [self.bundle.bundleIdentifier stringByAppendingString:@".formatOnSave"];
 }
 
 - (NSString *)stylePreferencesKey {
