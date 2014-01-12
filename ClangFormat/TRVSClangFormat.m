@@ -71,10 +71,22 @@ static TRVSClangFormat *sharedPlugin;
 
 - (void)prepareFormatMenu {
   [self.formatMenu removeAllItems];
-  [self addStyleMenuItemsToSubmenu];
+  [self addMenuItemsToFormatMenu];
 }
 
-- (void)addStyleMenuItemsToSubmenu {
+- (void)addMenuItemsToFormatMenu {
+  [self addActioningMenuItemsToFormatMenu];
+
+  [self.formatMenu addItem:[NSMenuItem separatorItem]];
+
+  [self addStyleMenuItemsToFormatMenu];
+
+  [self.formatMenu addItem:[NSMenuItem separatorItem]];
+
+  [self addFormatOnSaveMenuItem];
+}
+
+- (void)addActioningMenuItemsToFormatMenu {
   NSMenuItem *formatActiveFileItem = [[NSMenuItem alloc]
       initWithTitle:NSLocalizedString(@"Format active file", nil)
              action:@selector(formatActiveFile)
@@ -95,9 +107,9 @@ static TRVSClangFormat *sharedPlugin;
       keyEquivalent:@""];
   [formatSelectedFilesItem setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedFilesItem];
+}
 
-  [self.formatMenu addItem:[NSMenuItem separatorItem]];
-
+- (void)addStyleMenuItemsToFormatMenu {
   NSMenuItem *styleMenuItem =
       [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Format style:", nil)
                                  action:NULL
@@ -107,18 +119,6 @@ static TRVSClangFormat *sharedPlugin;
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop) {
     [self addMenuItemWithStyle:format];
   }];
-
-  [self.formatMenu addItem:[NSMenuItem separatorItem]];
-
-  NSString *title = NSLocalizedString(@"Format on save", nil);
-  if ([self formatOnSave])
-    title = [title stringByAppendingString:@" ✔︎"];
-  NSMenuItem *toggleFormatOnSaveMenuItem =
-      [[NSMenuItem alloc] initWithTitle:title
-                                 action:@selector(toggleFormatOnSave)
-                          keyEquivalent:@""];
-  [toggleFormatOnSaveMenuItem setTarget:self];
-  [self.formatMenu addItem:toggleFormatOnSaveMenuItem];
 }
 
 - (void)addMenuItemWithStyle:(NSString *)style {
@@ -131,6 +131,19 @@ static TRVSClangFormat *sharedPlugin;
                           keyEquivalent:@""];
   [menuItem setTarget:self];
   [self.formatMenu addItem:menuItem];
+}
+
+- (void)addFormatOnSaveMenuItem {
+  NSString *title = NSLocalizedString(@"Format on save", nil);
+  if ([self formatOnSave])
+    title = [title stringByAppendingString:@" ✔︎"];
+
+  NSMenuItem *toggleFormatOnSaveMenuItem =
+      [[NSMenuItem alloc] initWithTitle:title
+                                 action:@selector(toggleFormatOnSave)
+                          keyEquivalent:@""];
+  [toggleFormatOnSaveMenuItem setTarget:self];
+  [self.formatMenu addItem:toggleFormatOnSaveMenuItem];
 }
 
 - (void)addMenuItemsToMenu {
@@ -148,7 +161,7 @@ static TRVSClangFormat *sharedPlugin;
 
   self.formatMenu =
       [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Clang Format", nil)];
-  [self addStyleMenuItemsToSubmenu];
+  [self addMenuItemsToFormatMenu];
   [actionMenuItem setSubmenu:self.formatMenu];
 }
 

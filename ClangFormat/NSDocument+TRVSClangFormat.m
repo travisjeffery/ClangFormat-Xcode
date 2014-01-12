@@ -14,14 +14,6 @@ static BOOL trvs_formatOnSave;
 
 @implementation NSDocument (TRVSClangFormat)
 
-+ (void)settrvs_formatOnSave:(BOOL)formatOnSave {
-  trvs_formatOnSave = formatOnSave;
-}
-
-+ (BOOL)trvs_formatOnSave {
-  return trvs_formatOnSave;
-}
-
 - (void)trvs_saveDocumentWithDelegate:(id)delegate
                       didSaveSelector:(SEL)didSaveSelector
                           contextInfo:(void *)contextInfo {
@@ -47,6 +39,14 @@ static BOOL trvs_formatOnSave;
           @"trvs_saveDocumentWithDelegate:didSaveSelector:contextInfo:"));
 
   method_exchangeImplementations(original, swizzle);
+}
+
++ (void)settrvs_formatOnSave:(BOOL)formatOnSave {
+  trvs_formatOnSave = formatOnSave;
+}
+
++ (BOOL)trvs_formatOnSave {
+  return trvs_formatOnSave;
 }
 
 @end
