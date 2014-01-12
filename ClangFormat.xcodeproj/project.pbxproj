@@ -20,6 +20,7 @@
 		32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDD9187EFA4F00D4E980 /* TRVSFormatter.m */; };
 		32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */; };
 		32D2236C187C28E1008D12A3 /* clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 32D2236B187C28E1008D12A3 /* clang-format */; };
+		32F745E418823A57007541E1 /* NSDocument+TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F745E318823A57007541E1 /* NSDocument+TRVSClangFormat.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,8 @@
 		32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSPreferences.m; sourceTree = "<group>"; };
 		32D22368187C28DC008D12A3 /* ClangFormat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ClangFormat.xcodeproj; sourceTree = SOURCE_ROOT; };
 		32D2236B187C28E1008D12A3 /* clang-format */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "clang-format"; path = "bin/clang-format"; sourceTree = SOURCE_ROOT; };
+		32F745E218823A57007541E1 /* NSDocument+TRVSClangFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDocument+TRVSClangFormat.h"; sourceTree = "<group>"; };
+		32F745E318823A57007541E1 /* NSDocument+TRVSClangFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDocument+TRVSClangFormat.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 				32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */,
 				32ABEDC8187EF90500D4E980 /* TRVSXcode.h */,
 				32ABEDC9187EF90500D4E980 /* TRVSXcode.m */,
+				32F745E218823A57007541E1 /* NSDocument+TRVSClangFormat.h */,
+				32F745E318823A57007541E1 /* NSDocument+TRVSClangFormat.m */,
 				32A57EEA187C05A4002DEC9D /* Supporting Files */,
 			);
 			path = ClangFormat;
@@ -203,6 +208,7 @@
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
 				3228E445187F200D0037DECF /* TRVSCodeFragment.m in Sources */,
 				32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */,
+				32F745E418823A57007541E1 /* NSDocument+TRVSClangFormat.m in Sources */,
 				32ABEDCA187EF90500D4E980 /* TRVSXcode.m in Sources */,
 				32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */,
 			);

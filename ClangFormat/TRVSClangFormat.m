@@ -9,6 +9,7 @@
 #import "TRVSClangFormat.h"
 #import "TRVSPreferences.h"
 #import "TRVSFormatter.h"
+#import "NSDocument+TRVSClangFormat.h"
 
 static TRVSClangFormat *sharedPlugin;
 
@@ -43,9 +44,10 @@ static TRVSClangFormat *sharedPlugin;
       initWithApplicationID:self.bundle.bundleIdentifier];
   NSString *style = [self.preferences objectForKey:[self stylePreferencesKey]]
                             ?: [[self styles] firstObject];
-  self.formatter = [[TRVSFormatter alloc]
-       initWithStyle:style
-      executablePath:[self.bundle pathForResource:@"clang-format" ofType:@""]];
+  self.formatter = [TRVSFormatter sharedFormatter];
+  self.formatter.style = style;
+  self.formatter.executablePath =
+      [self.bundle pathForResource:@"clang-format" ofType:@""];
 
   [self addMenuItemsToMenu];
 

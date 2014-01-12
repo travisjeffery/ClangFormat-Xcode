@@ -8,15 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class IDESourceCodeDocument;
+
 @interface TRVSFormatter : NSObject
 
 @property(nonatomic, copy) NSString *style;
 @property(nonatomic, copy) NSString *executablePath;
 
++ (instancetype)sharedFormatter;
 - (instancetype)initWithStyle:(NSString *)style
                executablePath:(NSString *)executablePath;
 - (void)formatActiveFile;
 - (void)formatSelectedCharacters;
 - (void)formatSelectedFiles;
+- (void)formatDocument:(IDESourceCodeDocument *)document;
 
 @end

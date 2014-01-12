@@ -12,6 +12,17 @@
 
 @implementation TRVSFormatter
 
++ (instancetype)sharedFormatter {
+  static id sharedFormatter = nil;
+  static dispatch_once_t onceToken;
+
+  dispatch_once(&onceToken, ^{
+    sharedFormatter = [[self alloc] initWithStyle:nil executablePath:nil];
+  });
+
+  return sharedFormatter;
+}
+
 - (instancetype)initWithStyle:(NSString *)style
                executablePath:(NSString *)executablePath {
   self = [self init];
@@ -60,6 +71,13 @@
 
     [IDEDocumentController releaseEditorDocument:document];
   }];
+}
+
+- (void)formatDocument:(IDESourceCodeDocument *)document {
+  NSRange wholeRangeOfDocument =
+      NSMakeRange(0, [[document textStorage] length]);
+  [self formatRanges:@[ [NSValue valueWithRange:wholeRangeOfDocument] ]
+          inDocument:document];
 }
 
 #pragma mark - Private
