@@ -76,13 +76,9 @@ static TRVSClangFormat *sharedPlugin;
 
 - (void)addMenuItemsToFormatMenu {
   [self addActioningMenuItemsToFormatMenu];
-
-  [self.formatMenu addItem:[NSMenuItem separatorItem]];
-
+  [self addSeparatorToFormatMenu];
   [self addStyleMenuItemsToFormatMenu];
-
-  [self.formatMenu addItem:[NSMenuItem separatorItem]];
-
+  [self addSeparatorToFormatMenu];
   [self addFormatOnSaveMenuItem];
 }
 
@@ -107,6 +103,10 @@ static TRVSClangFormat *sharedPlugin;
       keyEquivalent:@""];
   [formatSelectedFilesItem setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedFilesItem];
+}
+
+- (void)addSeparatorToFormatMenu {
+  [self.formatMenu addItem:[NSMenuItem separatorItem]];
 }
 
 - (void)addStyleMenuItemsToFormatMenu {
