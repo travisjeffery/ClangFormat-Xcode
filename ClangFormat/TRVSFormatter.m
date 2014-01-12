@@ -74,6 +74,9 @@
 }
 
 - (void)formatDocument:(IDESourceCodeDocument *)document {
+  if ([TRVSXcode sourceCodeDocument] != document)
+    return;
+
   NSUInteger location = [[TRVSXcode textView] selectedRange].location;
   NSUInteger length = [[document textStorage] length];
   NSRange wholeRangeOfDocument = NSMakeRange(0, length);
