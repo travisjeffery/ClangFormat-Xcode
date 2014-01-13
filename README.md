@@ -16,6 +16,27 @@ OR
 
 Clone this repo, build and run ClangFormat, restart Xcode.
 
+## Usage:
+
+### Format on save
+
+I.e., you press `command-s` and the file is formatted and wrote to disk.
+
+In the menu, open Edit > Clang Format > Click Format on save (a checkmark appears in this menu item indicicating that the feature is active.)
+
+### Assign keyboard shortcuts
+
+You can assign your own keyboard shortcuts like so:
+
+- Open the System Preferences > Keyboard > Shortcuts > App Shortcuts > Click +
+- Set the application to be Xcode
+- Set the menu title to an action title, e.g. "Format active file"
+- Set your shortcut
+
+In this example, we'll format the active file when `control-i` is pressed.
+
+![assign keyboard shortcut](https://raw.github.com/travisjeffery/ClangFormat-Xcode/master/README/assign-keyboard-shortcut.png)
+
 ### Using your own style configuration
 
 By using Clang Format > File in the plug-in menu, Clang will look for the nearest `.clang-format` file from the input file. Most likely, you'll have a .clang-format file at the root of your project.
