@@ -83,13 +83,17 @@
 
   NSUInteger diff = labs(length - [[document textStorage] length]);
 
-  if (length > [[document textStorage] length])
+  BOOL documentIsLongerAfterFormatting =
+      length > [[document textStorage] length];
+
+  if (documentIsLongerAfterFormatting && location > diff) {
     location -= diff;
-  else
+  } else if (!documentIsLongerAfterFormatting) {
     location += diff;
+  }
 
   NSRange range = NSMakeRange(location, 0);
-  [[TRVSXcode textView] setSelectedRange:NSMakeRange(location, 0)];
+  [[TRVSXcode textView] setSelectedRange:range];
   [[TRVSXcode textView] scrollRangeToVisible:range];
 }
 
