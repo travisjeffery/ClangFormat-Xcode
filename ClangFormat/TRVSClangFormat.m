@@ -84,21 +84,21 @@ static TRVSClangFormat *sharedPlugin;
 
 - (void)addActioningMenuItemsToFormatMenu {
   NSMenuItem *formatActiveFileItem = [[NSMenuItem alloc]
-      initWithTitle:NSLocalizedString(@"Format active file", nil)
+      initWithTitle:NSLocalizedString(@"Format File in Focus", nil)
              action:@selector(formatActiveFile)
       keyEquivalent:@""];
   [formatActiveFileItem setTarget:self.formatter];
   [self.formatMenu addItem:formatActiveFileItem];
 
   NSMenuItem *formatSelectedCharacters = [[NSMenuItem alloc]
-      initWithTitle:NSLocalizedString(@"Format selected characters", nil)
+      initWithTitle:NSLocalizedString(@"Format Selected Text", nil)
              action:@selector(formatSelectedCharacters)
       keyEquivalent:@""];
   [formatSelectedCharacters setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedCharacters];
 
   NSMenuItem *formatSelectedFilesItem = [[NSMenuItem alloc]
-      initWithTitle:NSLocalizedString(@"Format selected files", nil)
+      initWithTitle:NSLocalizedString(@"Format Selected Files", nil)
              action:@selector(formatSelectedFiles)
       keyEquivalent:@""];
   [formatSelectedFilesItem setTarget:self.formatter];
@@ -110,33 +110,28 @@ static TRVSClangFormat *sharedPlugin;
 }
 
 - (void)addStyleMenuItemsToFormatMenu {
-  NSMenuItem *styleMenuItem =
-      [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Format style:", nil)
-                                 action:NULL
-                          keyEquivalent:@""];
-  [self.formatMenu addItem:styleMenuItem];
-
   [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop) {
     [self addMenuItemWithStyle:format];
   }];
 }
 
 - (void)addMenuItemWithStyle:(NSString *)style {
-  if ([style isEqualToString:self.formatter.style])
-    style = [style stringByAppendingString:@" 👈"];
-
   NSMenuItem *menuItem =
       [[NSMenuItem alloc] initWithTitle:style
                                  action:@selector(setStyleToUseFromMenuItem:)
                           keyEquivalent:@""];
   [menuItem setTarget:self];
+
+  if ([style isEqualToString:self.formatter.style])
+    menuItem.state = NSOnState;
+
   [self.formatMenu addItem:menuItem];
 }
 
 - (void)addFormatOnSaveMenuItem {
-  NSString *title = NSLocalizedString(@"Format on save", nil);
+  NSString *title = NSLocalizedString(@"Enable Format on Save", nil);
   if ([self formatOnSave])
-    title = [title stringByAppendingString:@" ✔︎"];
+    title = NSLocalizedString(@"Disable Format on Save", nil);
 
   NSMenuItem *toggleFormatOnSaveMenuItem =
       [[NSMenuItem alloc] initWithTitle:title
