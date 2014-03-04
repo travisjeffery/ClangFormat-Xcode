@@ -12,8 +12,8 @@
 
 @interface TRVSFormatter : NSObject
 
-@property(nonatomic, copy) NSString *style;
-@property(nonatomic, copy) NSString *executablePath;
+@property (nonatomic, copy) NSString *style;
+@property (nonatomic, copy) NSString *executablePath;
 
 + (instancetype)sharedFormatter;
 - (instancetype)initWithStyle:(NSString *)style

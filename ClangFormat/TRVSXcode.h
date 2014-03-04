@@ -11,8 +11,8 @@
 // here be dragons... have to declare these private apis
 
 @interface DVTTextDocumentLocation : NSObject
-@property(readonly) NSRange characterRange;
-@property(readonly) NSRange lineRange;
+@property (readonly) NSRange characterRange;
+@property (readonly) NSRange lineRange;
 @end
 
 @interface DVTTextPreferences : NSObject
@@ -32,16 +32,16 @@
 @end
 
 @interface DVTFileDataType : NSObject
-@property(readonly) NSString *identifier;
+@property (readonly) NSString *identifier;
 @end
 
 @interface DVTFilePath : NSObject
-@property(readonly) NSURL *fileURL;
-@property(readonly) DVTFileDataType *fileDataTypePresumed;
+@property (readonly) NSURL *fileURL;
+@property (readonly) DVTFileDataType *fileDataTypePresumed;
 @end
 
 @interface IDEContainerItem : NSObject
-@property(readonly) DVTFilePath *resolvedFilePath;
+@property (readonly) DVTFilePath *resolvedFilePath;
 @end
 
 @interface IDEGroup : IDEContainerItem
@@ -53,17 +53,17 @@
 @end
 
 @interface IDENavigableItem : NSObject
-@property(readonly) IDENavigableItem *parentItem;
-@property(readonly) id representedObject;
+@property (readonly) IDENavigableItem *parentItem;
+@property (readonly) id representedObject;
 @end
 
 @interface IDEFileNavigableItem : IDENavigableItem
-@property(readonly) DVTFileDataType *documentType;
-@property(readonly) NSURL *fileURL;
+@property (readonly) DVTFileDataType *documentType;
+@property (readonly) NSURL *fileURL;
 @end
 
 @interface IDEStructureNavigator : NSObject
-@property(retain) NSArray *selectedObjects;
+@property (retain) NSArray *selectedObjects;
 @end
 
 @interface IDENavigableItemCoordinator : NSObject
@@ -77,7 +77,7 @@
 @end
 
 @interface IDEWorkspaceTabController : NSObject
-@property(readonly) IDENavigatorArea *navigatorArea;
+@property (readonly) IDENavigatorArea *navigatorArea;
 @end
 
 @interface IDEDocumentController : NSDocumentController
@@ -92,12 +92,12 @@
 @end
 
 @interface IDESourceCodeComparisonEditor : NSObject
-@property(readonly) NSTextView *keyTextView;
-@property(retain) NSDocument *primaryDocument;
+@property (readonly) NSTextView *keyTextView;
+@property (retain) NSDocument *primaryDocument;
 @end
 
 @interface IDESourceCodeEditor : NSObject
-@property(retain) NSTextView *textView;
+@property (retain) NSTextView *textView;
 - (IDESourceCodeDocument *)sourceCodeDocument;
 @end
 
@@ -111,16 +111,16 @@
 @end
 
 @interface IDEWorkspaceWindowController : NSObject
-@property(readonly) IDEWorkspaceTabController *activeWorkspaceTabController;
+@property (readonly) IDEWorkspaceTabController *activeWorkspaceTabController;
 - (IDEEditorArea *)editorArea;
 @end
 
 @interface IDEWorkspace : NSObject
-@property(readonly) DVTFilePath *representingFilePath;
+@property (readonly) DVTFilePath *representingFilePath;
 @end
 
 @interface IDEWorkspaceDocument : NSDocument
-@property(readonly) IDEWorkspace *workspace;
+@property (readonly) IDEWorkspace *workspace;
 @end
 
 @interface TRVSXcode : NSObject

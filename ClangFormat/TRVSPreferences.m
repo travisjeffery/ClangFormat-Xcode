@@ -10,7 +10,7 @@
 
 @interface TRVSPreferences ()
 
-@property(nonatomic, copy) NSString *applicationID;
+@property (nonatomic, copy) NSString *applicationID;
 
 @end
 

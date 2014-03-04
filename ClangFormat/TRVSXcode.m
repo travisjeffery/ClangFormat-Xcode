@@ -62,7 +62,7 @@
 
 + (NSArray *)selectedFileNavigableItems {
   if (![[self windowController]
-           isKindOfClass:NSClassFromString(@"IDEWorkspaceWindowController")])
+          isKindOfClass:NSClassFromString(@"IDEWorkspaceWindowController")])
     return nil;
 
   IDEWorkspaceWindowController *workspaceController =
@@ -73,23 +73,24 @@
   id currentNavigator = [navigatorArea currentNavigator];
 
   if (![currentNavigator
-           isKindOfClass:NSClassFromString(@"IDEStructureNavigator")])
+          isKindOfClass:NSClassFromString(@"IDEStructureNavigator")])
     return nil;
 
   NSMutableArray *array = [NSMutableArray array];
 
-  [[currentNavigator selectedObjects] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-  {
-    if (![obj isKindOfClass:NSClassFromString(@"IDEFileNavigableItem")])
-      return;
+  [[currentNavigator selectedObjects]
+      enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+          if (![obj isKindOfClass:NSClassFromString(@"IDEFileNavigableItem")])
+            return;
 
-    IDEFileNavigableItem *fileNavigableItem = obj;
-    NSString *uti = fileNavigableItem.documentType.identifier;
-    if ([[NSWorkspace sharedWorkspace] type:uti
-                             conformsToType:(NSString *)kUTTypeSourceCode]) {
-      [array addObject:fileNavigableItem];
-    }
-  }];
+          IDEFileNavigableItem *fileNavigableItem = obj;
+          NSString *uti = fileNavigableItem.documentType.identifier;
+          if ([[NSWorkspace sharedWorkspace]
+                            type:uti
+                  conformsToType:(NSString *)kUTTypeSourceCode]) {
+            [array addObject:fileNavigableItem];
+          }
+      }];
 
   return array;
 }

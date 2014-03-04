@@ -17,7 +17,7 @@
   static dispatch_once_t onceToken;
 
   dispatch_once(&onceToken, ^{
-    sharedFormatter = [[self alloc] initWithStyle:nil executablePath:nil];
+      sharedFormatter = [[self alloc] initWithStyle:nil executablePath:nil];
   });
 
   return sharedFormatter;
@@ -37,7 +37,7 @@
 
 - (void)formatActiveFile {
   [self formatRanges:
-          @[ [NSValue valueWithRange:[TRVSXcode wholeRangeOfTextView]] ]
+            @[ [NSValue valueWithRange:[TRVSXcode wholeRangeOfTextView]] ]
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
 
@@ -52,25 +52,29 @@
 - (void)formatSelectedFiles {
   NSArray *fileNavigableItems = [TRVSXcode selectedFileNavigableItems];
 
-  [fileNavigableItems enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop) {
-    NSDocument *document = [IDEDocumentController
-        retainedEditorDocumentForNavigableItem:fileNavigableItem
-                                         error:NULL];
+  [fileNavigableItems
+      enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem,
+                                   NSUInteger idx,
+                                   BOOL *stop) {
+          NSDocument *document = [IDEDocumentController
+              retainedEditorDocumentForNavigableItem:fileNavigableItem
+                                               error:NULL];
 
-    if ([document isKindOfClass:NSClassFromString(@"IDESourceCodeDocument")]) {
-      IDESourceCodeDocument *sourceCodeDocument =
-          (IDESourceCodeDocument *)document;
-      NSTextStorage *textStorage = [sourceCodeDocument textStorage];
-      NSRange wholeRange = NSMakeRange(0, [textStorage length]);
+          if ([document
+                  isKindOfClass:NSClassFromString(@"IDESourceCodeDocument")]) {
+            IDESourceCodeDocument *sourceCodeDocument =
+                (IDESourceCodeDocument *)document;
+            NSTextStorage *textStorage = [sourceCodeDocument textStorage];
+            NSRange wholeRange = NSMakeRange(0, [textStorage length]);
 
-      [self formatRanges:@[ [NSValue valueWithRange:wholeRange] ]
-              inDocument:sourceCodeDocument];
+            [self formatRanges:@[ [NSValue valueWithRange:wholeRange] ]
+                    inDocument:sourceCodeDocument];
 
-      [document saveDocument:nil];
-    }
+            [document saveDocument:nil];
+          }
 
-    [IDEDocumentController releaseEditorDocument:document];
-  }];
+          [IDEDocumentController releaseEditorDocument:document];
+      }];
 }
 
 - (void)formatDocument:(IDESourceCodeDocument *)document {
@@ -129,16 +133,18 @@
                               withDocument:(IDESourceCodeDocument *)document {
   NSMutableArray *selectionRanges = [[NSMutableArray alloc] init];
 
-  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment, NSUInteger idx, BOOL *stop) {
-    [textStorage beginEditing];
-    [textStorage replaceCharactersInRange:fragment.range
-                               withString:fragment.formattedString
-                          withUndoManager:document.undoManager];
+  [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment,
+                                          NSUInteger idx,
+                                          BOOL *stop) {
+      [textStorage beginEditing];
+      [textStorage replaceCharactersInRange:fragment.range
+                                 withString:fragment.formattedString
+                            withUndoManager:document.undoManager];
 
-    [self addSelectedRangeToSelectedRanges:selectionRanges
-                          usingTextStorage:textStorage];
+      [self addSelectedRangeToSelectedRanges:selectionRanges
+                            usingTextStorage:textStorage];
 
-    [textStorage endEditing];
+      [textStorage endEditing];
   }];
 
   return selectionRanges;
@@ -168,26 +174,29 @@
                                 withDocument:(IDESourceCodeDocument *)document {
   NSMutableArray *fragments = [[NSMutableArray alloc] init];
 
-  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
-    NSRange characterRange =
-        [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
+  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue,
+                                                     NSUInteger idx,
+                                                     BOOL *stop) {
+      NSRange characterRange =
+          [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
 
-    if (characterRange.location == NSNotFound)
-      return;
+      if (characterRange.location == NSNotFound)
+        return;
 
-    NSString *string = [[textStorage string] substringWithRange:characterRange];
+      NSString *string =
+          [[textStorage string] substringWithRange:characterRange];
 
-    if (!string.length)
-      return;
+      if (!string.length)
+        return;
 
-    TRVSCodeFragment *fragment = [[TRVSCodeFragment alloc] init];
-    fragment.string = string;
-    fragment.range = characterRange;
-    fragment.fileURL = document.fileURL;
-    [fragment formatWithStyle:self.style
-        usingClangFormatAtLaunchPath:self.executablePath];
+      TRVSCodeFragment *fragment = [[TRVSCodeFragment alloc] init];
+      fragment.string = string;
+      fragment.range = characterRange;
+      fragment.fileURL = document.fileURL;
+      [fragment formatWithStyle:self.style
+          usingClangFormatAtLaunchPath:self.executablePath];
 
-    [fragments addObject:fragment];
+      [fragments addObject:fragment];
   }];
 
   return fragments;
@@ -197,11 +206,13 @@
                         usingTextStorage:(DVTSourceTextStorage *)textStorage {
   NSMutableArray *lineRanges = [[NSMutableArray alloc] init];
 
-  [characterRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
-    [lineRanges
-        addObject:
-            [NSValue valueWithRange:[textStorage lineRangeForCharacterRange:
-                                                     [rangeValue rangeValue]]]];
+  [characterRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue,
+                                                NSUInteger idx,
+                                                BOOL *stop) {
+      [lineRanges
+          addObject:[NSValue valueWithRange:[textStorage
+                                                lineRangeForCharacterRange:
+                                                    [rangeValue rangeValue]]]];
   }];
 
   return lineRanges;
@@ -210,14 +221,16 @@
 - (NSArray *)continuousLineRangesOfRanges:(NSArray *)ranges {
   NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
 
-  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop) {
-    [indexSet addIndexesInRange:[rangeValue rangeValue]];
+  [ranges enumerateObjectsUsingBlock:^(NSValue *rangeValue,
+                                       NSUInteger idx,
+                                       BOOL *stop) {
+      [indexSet addIndexesInRange:[rangeValue rangeValue]];
   }];
 
   NSMutableArray *continuousRanges = [[NSMutableArray alloc] init];
 
   [indexSet enumerateRangesUsingBlock:^(NSRange range, BOOL *stop) {
-    [continuousRanges addObject:[NSValue valueWithRange:range]];
+      [continuousRanges addObject:[NSValue valueWithRange:range]];
   }];
 
   return continuousRanges;

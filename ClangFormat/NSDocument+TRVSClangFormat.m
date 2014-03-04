@@ -51,8 +51,8 @@ static BOOL trvs_formatOnSave;
 }
 
 - (BOOL)trvs_shouldFormatBeforeSaving {
-  return [[self class] trvs_formatOnSave] && [TRVSXcode sourceCodeDocument] ==
-                                                 self;
+  return [[self class] trvs_formatOnSave] &&
+         [TRVSXcode sourceCodeDocument] == self;
 }
 
 @end

@@ -15,10 +15,10 @@ static TRVSClangFormat *sharedPlugin;
 
 @interface TRVSClangFormat ()
 
-@property(nonatomic, strong) NSBundle *bundle;
-@property(nonatomic, strong) NSMenu *formatMenu;
-@property(nonatomic, strong) TRVSPreferences *preferences;
-@property(nonatomic, strong) TRVSFormatter *formatter;
+@property (nonatomic, strong) NSBundle *bundle;
+@property (nonatomic, strong) NSMenu *formatMenu;
+@property (nonatomic, strong) TRVSPreferences *preferences;
+@property (nonatomic, strong) TRVSFormatter *formatter;
 
 @end
 
@@ -27,8 +27,8 @@ static TRVSClangFormat *sharedPlugin;
 + (void)pluginDidLoad:(NSBundle *)plugin {
   static id sharedPlugin = nil;
   static dispatch_once_t onceToken;
-  NSString *currentApplicationName = [[NSBundle mainBundle] infoDictionary]
-      [@"CFBundleName"];
+  NSString *currentApplicationName =
+      [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
   if ([currentApplicationName isEqual:@"Xcode"]) {
     dispatch_once(&onceToken,
                   ^{ sharedPlugin = [[self alloc] initWithBundle:plugin]; });
@@ -110,8 +110,10 @@ static TRVSClangFormat *sharedPlugin;
 }
 
 - (void)addStyleMenuItemsToFormatMenu {
-  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx, BOOL *stop) {
-    [self addMenuItemWithStyle:format];
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format,
+                                              NSUInteger idx,
+                                              BOOL *stop) {
+      [self addMenuItemWithStyle:format];
   }];
 }
 
@@ -174,7 +176,7 @@ static TRVSClangFormat *sharedPlugin;
 
 - (BOOL)formatOnSave {
   return [[self.preferences
-              objectForKey:[self formatOnSavePreferencesKey]] boolValue];
+      objectForKey:[self formatOnSavePreferencesKey]] boolValue];
 }
 
 - (NSString *)formatOnSavePreferencesKey {

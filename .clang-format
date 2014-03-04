@@ -1,5 +1,6 @@
 ---
 BasedOnStyle:  Chromium
 PointerBindsToType: false
+ObjCSpaceAfterProperty: true
 ...
 

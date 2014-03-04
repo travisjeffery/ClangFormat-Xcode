@@ -13,9 +13,9 @@
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath;
 
-@property(nonatomic, copy) NSString *string;
-@property(nonatomic, copy) NSString *formattedString;
-@property(nonatomic) NSRange range;
-@property(nonatomic, strong) NSURL *fileURL;
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSString *formattedString;
+@property (nonatomic) NSRange range;
+@property (nonatomic, strong) NSURL *fileURL;
 
 @end
