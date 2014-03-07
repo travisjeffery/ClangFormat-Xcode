@@ -30,7 +30,7 @@ You can assign your own keyboard shortcuts like so:
 
 - Open the System Preferences > Keyboard > Shortcuts > App Shortcuts > Click +
 - Set the application to be Xcode
-- Set the menu title to an action title, e.g. "Format active file"
+- Set the menu title to an action title, e.g. "Format File in Focus"
 - Set your shortcut
 
 In this example, we'll format the active file when `control-i` is pressed.
