@@ -17,5 +17,7 @@
 @property (nonatomic, copy) NSString *formattedString;
 @property (nonatomic) NSRange range;
 @property (nonatomic, strong) NSURL *fileURL;
+@property (assign) BOOL formattedSuccessfully;
+@property (nonatomic, copy) NSString *errorMessage;
 
 @end

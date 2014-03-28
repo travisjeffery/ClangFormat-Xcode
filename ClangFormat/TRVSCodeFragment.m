@@ -19,9 +19,10 @@
                     error:NULL];
 
   NSPipe *outputPipe = [NSPipe pipe];
-
+  NSPipe *errorPipe = [NSPipe pipe];
   NSTask *task = [[NSTask alloc] init];
   task.standardOutput = outputPipe;
+  task.standardError = errorPipe;
   task.launchPath = launchPath;
   task.arguments = @[
     [NSString stringWithFormat:@"--style=%@", style],
@@ -30,14 +31,22 @@
   ];
 
   [outputPipe.fileHandleForReading readToEndOfFileInBackgroundAndNotify];
-
   [task launch];
   [task waitUntilExit];
 
-  self.formattedString = [NSString stringWithContentsOfURL:tmpFileURL
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:NULL];
-
+  NSData *stdErr = [errorPipe.fileHandleForReading readDataToEndOfFile];
+  if ([stdErr length] > 0) {
+    NSString *errorMessage =
+        [[NSString alloc] initWithData:stdErr encoding:NSUTF8StringEncoding];
+    self.errorMessage = errorMessage;
+    self.formattedSuccessfully = NO;
+  } else {
+    self.formattedString =
+        [NSString stringWithContentsOfURL:tmpFileURL
+                                 encoding:NSUTF8StringEncoding
+                                    error:NULL];
+    self.formattedSuccessfully = YES;
+  }
   [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
 }
 

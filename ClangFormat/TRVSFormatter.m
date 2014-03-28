@@ -67,10 +67,14 @@
             NSTextStorage *textStorage = [sourceCodeDocument textStorage];
             NSRange wholeRange = NSMakeRange(0, [textStorage length]);
 
-            [self formatRanges:@[ [NSValue valueWithRange:wholeRange] ]
-                    inDocument:sourceCodeDocument];
-
-            [document saveDocument:nil];
+            BOOL errorsFound =
+                [self formatRanges:@[ [NSValue valueWithRange:wholeRange] ]
+                        inDocument:sourceCodeDocument];
+            if (errorsFound) {
+              *stop = YES;
+            } else {
+              [document saveDocument:nil];
+            }
           }
 
           [IDEDocumentController releaseEditorDocument:document];
@@ -103,10 +107,10 @@
 
 #pragma mark - Private
 
-- (void)formatRanges:(NSArray *)ranges
+- (BOOL)formatRanges:(NSArray *)ranges
           inDocument:(IDESourceCodeDocument *)document {
   DVTSourceTextStorage *textStorage = [document textStorage];
-
+  BOOL errorsFound = YES;
   NSArray *lineRanges =
       [self lineRangesOfCharacterRanges:ranges usingTextStorage:textStorage];
 
@@ -118,6 +122,12 @@
                            usingTextStorage:textStorage
                                withDocument:document];
 
+  TRVSCodeFragment *firstUnsuccessfulFragment = nil;
+  firstUnsuccessfulFragment = [self findFirstUnsuccessfulFragment:fragments];
+  if (firstUnsuccessfulFragment) {
+    [self presentClangFormatError:firstUnsuccessfulFragment.errorMessage];
+    return errorsFound;
+  }
   NSArray *selectionRanges =
       [self selectionRangesAfterReplacingFragments:fragments
                                   usingTextStorage:textStorage
@@ -125,6 +135,7 @@
 
   if (selectionRanges.count > 0)
     [[TRVSXcode textView] setSelectedRanges:selectionRanges];
+  return !errorsFound;
 }
 
 - (NSArray *)
@@ -234,6 +245,24 @@
   }];
 
   return continuousRanges;
+}
+
+- (TRVSCodeFragment *)findFirstUnsuccessfulFragment:(NSArray *)fragments {
+  __block TRVSCodeFragment *firstUnsuccessfulFragment = nil;
+  [fragments
+      enumerateObjectsUsingBlock:^(id fragment, NSUInteger idx, BOOL *stop) {
+          if (![fragment formattedSuccessfully]) {
+            firstUnsuccessfulFragment = fragment;
+            *stop = YES;
+          }
+      }];
+  return firstUnsuccessfulFragment;
+}
+
+- (void)presentClangFormatError:(NSString *)errorMessage {
+  NSAlert *alert = [[NSAlert alloc] init];
+  [alert setMessageText:errorMessage];
+  [alert runModal];
 }
 
 @end
