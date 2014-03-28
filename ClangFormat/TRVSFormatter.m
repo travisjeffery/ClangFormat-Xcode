@@ -128,12 +128,6 @@
     [self presentClangFormatError:firstUnsuccessfulFragment.errorMessage];
     return errorsFound;
   }
-  fragments = [fragments
-      filteredArrayUsingPredicate:
-          [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject,
-                                                NSDictionary *bindings) {
-            return [evaluatedObject formattedSuccessfully];
-          }]];
   NSArray *selectionRanges =
       [self selectionRangesAfterReplacingFragments:fragments
                                   usingTextStorage:textStorage
