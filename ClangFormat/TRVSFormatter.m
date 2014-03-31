@@ -106,6 +106,8 @@
 - (void)formatRanges:(NSArray *)ranges
           inDocument:(IDESourceCodeDocument *)document {
   DVTSourceTextStorage *textStorage = [document textStorage];
+    
+  NSRange originSelectedRange = [[TRVSXcode textView] selectedRange];
 
   NSArray *lineRanges =
       [self lineRangesOfCharacterRanges:ranges usingTextStorage:textStorage];
@@ -118,13 +120,12 @@
                            usingTextStorage:textStorage
                                withDocument:document];
 
-  NSArray *selectionRanges =
-      [self selectionRangesAfterReplacingFragments:fragments
-                                  usingTextStorage:textStorage
-                                      withDocument:document];
-
-  if (selectionRanges.count > 0)
-    [[TRVSXcode textView] setSelectedRanges:selectionRanges];
+  [self selectionRangesAfterReplacingFragments:fragments
+                              usingTextStorage:textStorage
+                                  withDocument:document];
+    
+  [[TRVSXcode textView] setSelectedRange:originSelectedRange];
+  [[TRVSXcode textView] centerSelectionInVisibleArea:nil];
 }
 
 - (NSArray *)
