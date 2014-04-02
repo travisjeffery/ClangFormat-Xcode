@@ -49,6 +49,11 @@
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
 
+- (void)deleteLine {
+  [[TRVSXcode textView] selectLine:nil];
+  [[TRVSXcode textView] delete:nil];
+}
+
 - (void)formatSelectedFiles {
   NSArray *fileNavigableItems = [TRVSXcode selectedFileNavigableItems];
 
