@@ -23,4 +23,6 @@
 - (void)formatSelectedFiles;
 - (void)formatDocument:(IDESourceCodeDocument *)document;
 
+- (void)deleteLine;
+
 @end

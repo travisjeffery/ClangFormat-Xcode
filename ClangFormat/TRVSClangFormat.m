@@ -103,6 +103,13 @@ static TRVSClangFormat *sharedPlugin;
       keyEquivalent:@""];
   [formatSelectedFilesItem setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedFilesItem];
+
+  NSMenuItem *deleteLineItem =
+      [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete Line", nil)
+                                 action:@selector(deleteLine)
+                          keyEquivalent:@""];
+  [deleteLineItem setTarget:self.formatter];
+  [self.formatMenu addItem:deleteLineItem];
 }
 
 - (void)addSeparatorToFormatMenu {
