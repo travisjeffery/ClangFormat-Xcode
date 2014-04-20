@@ -52,7 +52,16 @@ static BOOL trvs_formatOnSave;
 
 - (BOOL)trvs_shouldFormatBeforeSaving {
   return [[self class] trvs_formatOnSave] &&
-         [TRVSXcode sourceCodeDocument] == self;
+         [TRVSXcode sourceCodeDocument] == self && [self shouldFormat];
+}
+
+- (BOOL)shouldFormat {
+  return [[self supportedFileTypes]
+      containsObject:[[[self fileURL] pathExtension] lowercaseString]];
+}
+
+- (NSSet *)supportedFileTypes {
+  return [NSSet setWithObjects:@"c", @"h", @"mm", @"cpp", @"m", nil];
 }
 
 @end
