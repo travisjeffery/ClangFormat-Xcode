@@ -9,6 +9,7 @@
 #import "TRVSFormatter.h"
 #import "TRVSXcode.h"
 #import "TRVSCodeFragment.h"
+#import "NSDocument+TRVSClangFormat.h"
 
 @interface TRVSFormatter ()
 
@@ -52,9 +53,6 @@
     [[TRVSXcode selectedFileNavigableItems] enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem, NSUInteger idx, BOOL *stop) {
         NSDocument *document = [IDEDocumentController retainedEditorDocumentForNavigableItem:fileNavigableItem error:NULL];
 
-        if (![self shouldFormatDocument:document])
-            return;
-
         if ([document isKindOfClass:NSClassFromString(@"IDESourceCodeDocument")]) {
             IDESourceCodeDocument *sourceCodeDocument = (IDESourceCodeDocument *)document;
 
@@ -93,6 +91,9 @@
 #pragma mark - Private
 
 - (void)formatRanges:(NSArray *)ranges inDocument:(IDESourceCodeDocument *)document {
+    if (![document trvs_shouldFormat])
+        return;
+
     DVTSourceTextStorage *textStorage = [document textStorage];
 
     NSArray *lineRanges = [self lineRangesOfCharacterRanges:ranges usingTextStorage:textStorage];
@@ -204,18 +205,6 @@
     }];
 
     return continuousRanges;
-}
-
-- (BOOL)shouldFormatDocument:(NSDocument *)document {
-    return [[self supportedFileTypes] containsObject:[[[document fileURL] pathExtension] lowercaseString]];
-}
-
-- (NSSet *)supportedFileTypes {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _supportedFileTypes = [NSSet setWithObjects:@"c", @"h", @"mm", @"cpp", @"m", nil];
-    });
-    return _supportedFileTypes;
 }
 
 @end

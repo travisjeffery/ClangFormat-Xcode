@@ -13,4 +13,6 @@
 + (BOOL)trvs_formatOnSave;
 + (void)settrvs_formatOnSave:(BOOL)formatOnSave;
 
+- (BOOL)trvs_shouldFormat;
+
 @end
