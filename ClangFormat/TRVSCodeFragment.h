@@ -8,14 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TRVSCodeFragment : NSObject
+@class TRVSCodeFragment;
 
-- (void)formatWithStyle:(NSString *)style
-    usingClangFormatAtLaunchPath:(NSString *)launchPath;
+@interface TRVSCodeFragmentBuilder : NSObject
+
+- (TRVSCodeFragment *)build;
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic, copy) NSString *formattedString;
 @property (nonatomic) NSRange range;
 @property (nonatomic, strong) NSURL *fileURL;
+
+@end
+
+@interface TRVSCodeFragment : NSObject
+
++ (instancetype)fragmentUsingBlock:(void (^)(TRVSCodeFragmentBuilder *builder))block;
+
+- (void)formatWithStyle:(NSString *)style usingClangFormatAtLaunchPath:(NSString *)launchPath block:(void (^)(NSString *formattedString, NSError *error))block;
+
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSString *formattedString;
+@property (nonatomic) NSRange range;
+@property (nonatomic, strong) NSURL *fileURL;
+@property (nonatomic, strong) NSError *error;
 
 @end
