@@ -70,22 +70,21 @@
 
   NSData *errorData = [errorPipe.fileHandleForReading readDataToEndOfFile];
 
-  if (errorData.length > 0) {
-    self.error = [NSError
-        errorWithDomain:@"com.travisjeffery.error"
-                   code:-99
-               userInfo:@{
-                          NSLocalizedDescriptionKey :
-                          [[NSString alloc] initWithData:errorData
-                                                encoding:NSUTF8StringEncoding]
-                        }];
-  }
-
   self.formattedString = [NSString stringWithContentsOfURL:tmpFileURL
                                                   encoding:NSUTF8StringEncoding
                                                      error:NULL];
 
-  block(self.formattedString, self.error);
+  block(self.formattedString,
+        errorData.length > 0
+            ? [NSError errorWithDomain:@"com.travisjeffery.error"
+                                  code:-99
+                              userInfo:@{
+                                         NSLocalizedDescriptionKey :
+                                         [[NSString alloc]
+                                             initWithData:errorData
+                                                 encoding:NSUTF8StringEncoding]
+                                       }]
+            : nil);
 
   [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
 }
