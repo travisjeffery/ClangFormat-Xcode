@@ -21,6 +21,7 @@
 		32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 32ABEDDB187EFA4F00D4E980 /* TRVSPreferences.m */; };
 		32D2236C187C28E1008D12A3 /* clang-format in Resources */ = {isa = PBXBuildFile; fileRef = 32D2236B187C28E1008D12A3 /* clang-format */; };
 		32F745E418823A57007541E1 /* NSDocument+TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F745E318823A57007541E1 /* NSDocument+TRVSClangFormat.m */; };
+		93623CE4192111E900610C9F /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 93623CE3192111E900610C9F /* XMLDictionary.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,8 @@
 		32D2236B187C28E1008D12A3 /* clang-format */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "clang-format"; path = "bin/clang-format"; sourceTree = SOURCE_ROOT; };
 		32F745E218823A57007541E1 /* NSDocument+TRVSClangFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDocument+TRVSClangFormat.h"; sourceTree = "<group>"; };
 		32F745E318823A57007541E1 /* NSDocument+TRVSClangFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDocument+TRVSClangFormat.m"; sourceTree = "<group>"; };
+		93623CE2192111E900610C9F /* XMLDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLDictionary.h; sourceTree = "<group>"; };
+		93623CE3192111E900610C9F /* XMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLDictionary.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +74,7 @@
 		32A57ED9187C05A4002DEC9D = {
 			isa = PBXGroup;
 			children = (
+				93623CE1192111E900610C9F /* XMLDictionary */,
 				32A57EE9187C05A4002DEC9D /* ClangFormat */,
 				32A57EE4187C05A4002DEC9D /* Frameworks */,
 				32A57EE3187C05A4002DEC9D /* Products */,
@@ -134,6 +138,16 @@
 		32D22369187C28DC008D12A3 /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
+			sourceTree = "<group>";
+		};
+		93623CE1192111E900610C9F /* XMLDictionary */ = {
+			isa = PBXGroup;
+			children = (
+				93623CE2192111E900610C9F /* XMLDictionary.h */,
+				93623CE3192111E900610C9F /* XMLDictionary.m */,
+			);
+			name = XMLDictionary;
+			path = XMLDictionary/XMLDictionary;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +222,7 @@
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
 				3228E445187F200D0037DECF /* TRVSCodeFragment.m in Sources */,
 				32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */,
+				93623CE4192111E900610C9F /* XMLDictionary.m in Sources */,
 				32F745E418823A57007541E1 /* NSDocument+TRVSClangFormat.m in Sources */,
 				32ABEDCA187EF90500D4E980 /* TRVSXcode.m in Sources */,
 				32ABEDDD187EFA4F00D4E980 /* TRVSPreferences.m in Sources */,
@@ -259,6 +274,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					XMLDictionary,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -291,6 +311,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					XMLDictionary,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};

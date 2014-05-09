@@ -116,6 +116,14 @@
 
   DVTSourceTextStorage *textStorage = [document textStorage];
 
+  // If the entire file was selected, keep the selection that way afterwards.
+  BOOL entireFileSelected = NO;
+  NSRange wholeFileRange = NSMakeRange(0, [[document textStorage] length]);
+  if ([ranges count] == 1) {
+    NSRange candRange = [(NSValue *)[ranges objectAtIndex:0] rangeValue];
+    entireFileSelected = NSEqualRanges(candRange, wholeFileRange);
+  }
+
   NSArray *lineRanges =
       [self lineRangesOfCharacterRanges:ranges usingTextStorage:textStorage];
   NSArray *continuousLineRanges =
@@ -136,9 +144,11 @@
                                                                     withDocument:
                                                                         document];
 
-                                      if (selectionRanges.count > 0)
+                                      if (selectionRanges.count > 0 &&
+                                          !entireFileSelected) {
                                         [[TRVSXcode textView]
                                             setSelectedRanges:selectionRanges];
+                                      }
                                     } else {
                                       NSLog(@"FUCK has errors: %@", errors);
 
@@ -160,14 +170,33 @@
   [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment,
                                           NSUInteger idx,
                                           BOOL *stop) {
+
       [textStorage beginEditing];
 
-      [textStorage replaceCharactersInRange:fragment.range
-                                 withString:fragment.formattedString
-                            withUndoManager:document.undoManager];
+      NSArray *replacements =
+          [fragment.replacements valueForKey:@"replacement"];
 
-      [self addSelectedRangeToSelectedRanges:selectionRanges
-                            usingTextStorage:textStorage];
+      // Iterate over the replacements backwards, to make the replacements at
+      // the end of the file first, so the offsets don't change.
+      for (NSDictionary *replacement in
+           [replacements reverseObjectEnumerator]) {
+        NSString *offsetStr = [replacement valueForKey:@"_offset"];
+        NSString *lengthStr = [replacement valueForKey:@"_length"];
+        NSString *replacementStr = [replacement valueForKey:@"__text"];
+
+        NSInteger offset = [offsetStr integerValue];
+        NSInteger length = [lengthStr integerValue];
+        NSRange replacementRange = NSMakeRange(offset, length);
+
+		// Xcode doesn't like nil replacement strings.
+        if (!replacementStr) {
+          replacementStr = @"";
+        }
+		
+        [textStorage replaceCharactersInRange:replacementRange
+                                   withString:replacementStr
+                              withUndoManager:document.undoManager];
+      }
 
       [textStorage endEditing];
   }];
@@ -207,12 +236,10 @@
                                                      BOOL *stop) {
       NSRange characterRange =
           [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
-
       if (characterRange.location == NSNotFound)
         return;
 
-      NSString *string =
-          [[textStorage string] substringWithRange:characterRange];
+      NSString *string = [textStorage string];
 
       if (!string.length)
         return;
@@ -221,13 +248,14 @@
           fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
               builder.string = string;
               builder.range = characterRange;
+              builder.lineRange = rangeValue;
               builder.fileURL = document.fileURL;
           }];
 
       __weak typeof(fragment) weakFragment = fragment;
       [fragment formatWithStyle:self.style
           usingClangFormatAtLaunchPath:self.executablePath
-                                 block:^(NSString *formattedString,
+                                 block:^(NSDictionary *replacements,
                                          NSError *error) {
                                      __strong typeof(weakFragment)
                                          strongFragment = weakFragment;

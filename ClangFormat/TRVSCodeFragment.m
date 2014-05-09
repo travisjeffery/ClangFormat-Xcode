@@ -7,6 +7,7 @@
 //
 
 #import "TRVSCodeFragment.h"
+#import "XMLDictionary/XMLDictionary.h"
 
 @interface TRVSCodeFragment ()
 
@@ -35,6 +36,7 @@
   if (self = [super init]) {
     _string = [builder.string copy];
     _range = builder.range;
+    _lineRange = builder.lineRange;
     _fileURL = builder.fileURL;
   }
   return self;
@@ -42,49 +44,66 @@
 
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
-                           block:(void (^)(NSString *formattedString,
+                           block:(void (^)(NSDictionary *replacements,
                                            NSError *error))block {
-  NSURL *tmpFileURL = [self.fileURL URLByAppendingPathExtension:@"trvs"];
-  [self.string writeToURL:tmpFileURL
-               atomically:YES
-                 encoding:NSUTF8StringEncoding
-                    error:NULL];
+  char *tmpFilename = strdup(
+      [[[self.fileURL URLByAppendingPathExtension:@"XXXXXX"] path] UTF8String]);
+  int tmpFile = mkstemp(tmpFilename);
 
+  write(tmpFile,
+        [self.string UTF8String],
+        [self.string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+  close(tmpFile);
+  NSURL *tmpFileURL =
+      [NSURL fileURLWithPath:[NSString stringWithUTF8String:tmpFilename]];
+  free(tmpFilename);
+
+  NSData *errorData;
   NSPipe *outputPipe = [NSPipe pipe];
   NSPipe *errorPipe = [NSPipe pipe];
+
+  NSRange lineRange = [self.lineRange rangeValue];
+
+  // Xcode line ranges are zero-based, while clang-format's are one-based.
+  NSUInteger firstLine = lineRange.location + 1;
+  NSUInteger lastLine = firstLine + lineRange.length - 1;
 
   NSTask *task = [[NSTask alloc] init];
   task.standardOutput = outputPipe;
   task.standardError = errorPipe;
   task.launchPath = launchPath;
   task.arguments = @[
-    [NSString stringWithFormat:@"--style=%@", style],
-    @"-i",
+    [NSString stringWithFormat:@"-style=%@", style],
+    [NSString stringWithFormat:@"-lines=%lu:%lu", firstLine, lastLine],
+    @"-output-replacements-xml",
     [tmpFileURL path]
   ];
-
-  [outputPipe.fileHandleForReading readToEndOfFileInBackgroundAndNotify];
 
   [task launch];
   [task waitUntilExit];
 
-  NSData *errorData = [errorPipe.fileHandleForReading readDataToEndOfFile];
+  errorData = [errorPipe.fileHandleForReading readDataToEndOfFile];
+  NSData *replacementData =
+      [outputPipe.fileHandleForReading readDataToEndOfFile];
 
-  self.formattedString = [NSString stringWithContentsOfURL:tmpFileURL
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:NULL];
+  XMLDictionaryParser *parser = [XMLDictionaryParser new];
+  parser.trimWhiteSpace = NO;
+  parser.stripEmptyNodes = NO;
+  parser.alwaysUseArrays = YES;
+  self.replacements = [parser dictionaryWithData:replacementData];
 
-  block(self.formattedString,
-        errorData.length > 0
-            ? [NSError errorWithDomain:@"com.travisjeffery.error"
-                                  code:-99
-                              userInfo:@{
-                                         NSLocalizedDescriptionKey :
-                                         [[NSString alloc]
-                                             initWithData:errorData
-                                                 encoding:NSUTF8StringEncoding]
-                                       }]
-            : nil);
+  block(
+      self.replacements,
+      errorData.length > 0
+          ? [NSError
+                errorWithDomain:@"com.travisjeffery.error"
+                           code:-99
+                       userInfo:@{
+                                  NSLocalizedDescriptionKey : [[NSString alloc]
+                                      initWithData:errorData
+                                          encoding:NSUTF8StringEncoding]
+                                }]
+          : nil);
 
   [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
 }
