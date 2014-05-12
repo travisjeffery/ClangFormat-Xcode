@@ -1,0 +1,3 @@
+[submodule "XMLDictionary"]
+	path = XMLDictionary
+	url = https://github.com/nicklockwood/XMLDictionary.git
