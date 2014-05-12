@@ -50,9 +50,6 @@
 }
 
 - (void)formatSelectedCharacters {
-  if (![TRVSXcode textViewHasSelection])
-    return;
-
   [self formatRanges:[[TRVSXcode textView] selectedRanges]
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
