@@ -46,6 +46,12 @@ static TRVSClangFormat *sharedPlugin;
                             ?: [[self styles] firstObject];
   self.formatter = [TRVSFormatter sharedFormatter];
   self.formatter.style = style;
+
+  NSNumber *useSystemClangFormat =
+      [self.preferences objectForKey:[self useSystemClangFormatPreferencesKey]]
+              ?: [NSNumber numberWithBool:NO];
+  self.formatter.useSystemClangFormat = [useSystemClangFormat boolValue];
+
   self.formatter.executablePath =
       [self.bundle pathForResource:@"clang-format" ofType:@""];
 
@@ -80,6 +86,7 @@ static TRVSClangFormat *sharedPlugin;
   [self addStyleMenuItemsToFormatMenu];
   [self addSeparatorToFormatMenu];
   [self addFormatOnSaveMenuItem];
+  [self addUseSystemClangFormatMenuItem];
 }
 
 - (void)addActioningMenuItemsToFormatMenu {
@@ -143,6 +150,19 @@ static TRVSClangFormat *sharedPlugin;
   [self.formatMenu addItem:toggleFormatOnSaveMenuItem];
 }
 
+- (void)addUseSystemClangFormatMenuItem {
+  NSString *title = NSLocalizedString(@"Use System ClangFormat", nil);
+  NSMenuItem *useSystemClangFormatMenuItem =
+      [[NSMenuItem alloc] initWithTitle:title
+                                 action:@selector(toggleUseSystemClangFormat)
+                          keyEquivalent:@""];
+  [useSystemClangFormatMenuItem setTarget:self];
+  if ([self useSystemClangFormat]) {
+    useSystemClangFormatMenuItem.state = NSOnState;
+  }
+  [self.formatMenu addItem:useSystemClangFormatMenuItem];
+}
+
 - (void)addMenuItemsToMenu {
   NSMenuItem *menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
   if (!menuItem)
@@ -179,6 +199,23 @@ static TRVSClangFormat *sharedPlugin;
       objectForKey:[self formatOnSavePreferencesKey]] boolValue];
 }
 
+- (void)toggleUseSystemClangFormat {
+  BOOL useSystemClangFormat = ![self useSystemClangFormat];
+
+  [self.preferences setObject:@(useSystemClangFormat)
+                       forKey:[self useSystemClangFormatPreferencesKey]];
+  [self.preferences synchronize];
+
+  self.formatter.useSystemClangFormat = useSystemClangFormat;
+
+  [self prepareFormatMenu];
+}
+
+- (BOOL)useSystemClangFormat {
+  return [[self.preferences
+      objectForKey:[self useSystemClangFormatPreferencesKey]] boolValue];
+}
+
 - (NSString *)formatOnSavePreferencesKey {
   return
       [self.bundle.bundleIdentifier stringByAppendingString:@".formatOnSave"];
@@ -186,6 +223,11 @@ static TRVSClangFormat *sharedPlugin;
 
 - (NSString *)stylePreferencesKey {
   return [self.bundle.bundleIdentifier stringByAppendingString:@".format"];
+}
+
+- (NSString *)useSystemClangFormatPreferencesKey {
+  return [self.bundle.bundleIdentifier
+      stringByAppendingString:@".useSystemClangFormat"];
 }
 
 - (NSArray *)styles {
