@@ -29,13 +29,13 @@
 
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
-                           block:(void (^)(NSDictionary *replacements,
+                           block:(void (^)(NSArray *replacements,
                                            NSError *error))block;
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic) NSRange range;
 @property (nonatomic) NSRange lineRange;
-@property (nonatomic) NSDictionary *replacements;
+@property (nonatomic) NSArray *replacements;
 @property (nonatomic, strong) NSURL *fileURL;
 @property (nonatomic, strong) NSError *error;
 

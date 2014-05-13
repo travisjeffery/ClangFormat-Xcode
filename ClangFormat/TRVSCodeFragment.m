@@ -44,7 +44,7 @@
 
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
-                           block:(void (^)(NSDictionary *replacements,
+                           block:(void (^)(NSArray *replacements,
                                            NSError *error))block {
   char *tmpFilename = strdup(
       [[[self.fileURL URLByAppendingPathExtension:@"XXXXXX"] path] UTF8String]);
@@ -85,7 +85,21 @@
   NSData *replacementData =
       [outputPipe.fileHandleForReading readDataToEndOfFile];
 
-  self.replacements = [TRVSXMLDictionary dictionaryUsingData:replacementData];
+  NSDictionary *replacementDict =
+      [TRVSXMLDictionary dictionaryUsingData:replacementData];
+  self.replacements = [[replacementDict valueForKey:@"replacements"]
+      valueForKey:@"replacement"];
+
+  // Never have nil replacements.
+  if (!self.replacements) {
+    self.replacements = [[NSArray alloc] init];
+  }
+
+  // The replacements should always be an array. If there's only one replacement
+  // in XML, it'll be a single object. In this case, pack it into an array.
+  if (![self.replacements isKindOfClass:[NSArray class]]) {
+    self.replacements = [NSArray arrayWithObject:self.replacements];
+  }
 
   block(self.replacements,
         errorData.length > 0
