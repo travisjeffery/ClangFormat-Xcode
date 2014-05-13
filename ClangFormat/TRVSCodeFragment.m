@@ -44,7 +44,7 @@
 
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
-                           block:(void (^)(NSDictionary *replacements,
+                           block:(void (^)(NSArray *replacements,
                                            NSError *error))block {
   char *tmpFilename = strdup(
       [[[self.fileURL URLByAppendingPathExtension:@"XXXXXX"] path] UTF8String]);
@@ -85,7 +85,14 @@
   NSData *replacementData =
       [outputPipe.fileHandleForReading readDataToEndOfFile];
 
-  self.replacements = [TRVSXMLDictionary dictionaryUsingData:replacementData];
+  self.replacements = ({
+    NSArray *replacements =
+        [[[TRVSXMLDictionary dictionaryUsingData:replacementData]
+            valueForKey:@"replacements"] valueForKey:@"replacement"]
+                ?: @[];
+    [replacements isKindOfClass:[NSArray class]] ? replacements
+                                                 : @[ replacements ];
+  });
 
   block(self.replacements,
         errorData.length > 0

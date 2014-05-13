@@ -38,7 +38,7 @@
   if (self = [self init]) {
     self.style = style;
     self.executablePath = executablePath;
-	self.useSystemClangFormat = useSystemClangFormat;
+    self.useSystemClangFormat = useSystemClangFormat;
   }
   return self;
 }
@@ -135,8 +135,6 @@
                          withDocument:document
                                 block:^(NSArray *fragments, NSArray *errors) {
                                     if (errors.count == 0) {
-                                      NSLog(@"FUCK no errors!");
-
                                       NSArray *selectionRanges = [self
                                           selectionRangesAfterReplacingFragments:
                                               fragments
@@ -151,8 +149,6 @@
                                             setSelectedRanges:selectionRanges];
                                       }
                                     } else {
-                                      NSLog(@"FUCK has errors: %@", errors);
-
                                       NSAlert *alert = [NSAlert new];
                                       alert.messageText =
                                           [(NSError *)errors.firstObject
@@ -174,29 +170,16 @@
 
       [textStorage beginEditing];
 
-      NSArray *replacements =
-          [fragment.replacements valueForKey:@"replacement"];
-
       // Iterate over the replacements backwards, to make the replacements at
       // the end of the file first, so the offsets don't change.
       for (NSDictionary *replacement in
-           [replacements reverseObjectEnumerator]) {
-        NSString *offsetStr = [replacement valueForKey:@"_offset"];
-        NSString *lengthStr = [replacement valueForKey:@"_length"];
-        NSString *replacementStr = [replacement valueForKey:@"__text"];
-
-        NSInteger offset = [offsetStr integerValue];
-        NSInteger length = [lengthStr integerValue];
-        NSRange replacementRange = NSMakeRange(offset, length);
-
-		// Xcode doesn't like nil replacement strings.
-        if (!replacementStr) {
-          replacementStr = @"";
-        }
-
-        [textStorage replaceCharactersInRange:replacementRange
-                                   withString:replacementStr
-                              withUndoManager:document.undoManager];
+           [fragment.replacements reverseObjectEnumerator]) {
+        [textStorage
+            replaceCharactersInRange:
+                NSMakeRange([[replacement valueForKey:@"offset"] integerValue],
+                            [[replacement valueForKey:@"length"] integerValue])
+                          withString:[replacement valueForKey:@"text"] ?: @""
+                     withUndoManager:document.undoManager];
       }
 
       [textStorage endEditing];
@@ -263,7 +246,7 @@
   [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *lineRangeValue,
                                                      NSUInteger idx,
                                                      BOOL *stop) {
-    NSRange lineRange = [lineRangeValue rangeValue];
+      NSRange lineRange = [lineRangeValue rangeValue];
       NSRange characterRange =
           [textStorage characterRangeForLineRange:lineRange];
       if (characterRange.location == NSNotFound)
@@ -285,7 +268,7 @@
       __weak typeof(fragment) weakFragment = fragment;
       [fragment formatWithStyle:self.style
           usingClangFormatAtLaunchPath:executablePath
-                                 block:^(NSDictionary *replacements,
+                                 block:^(NSArray *replacements,
                                          NSError *error) {
                                      __strong typeof(weakFragment)
                                          strongFragment = weakFragment;

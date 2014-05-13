@@ -12,10 +12,10 @@ NSString *const TRVSXMLDictionaryTextKey = @"text";
 
 @interface TRVSXMLDictionary ()<NSXMLParserDelegate>
 
-@property(nonatomic, strong) NSMutableArray *stack;
-@property(nonatomic, strong) NSMutableString *text;
-@property(nonatomic, copy) NSData *data;
-@property(nonatomic, strong) NSError *error;
+@property (nonatomic, strong) NSMutableArray *stack;
+@property (nonatomic, strong) NSMutableString *text;
+@property (nonatomic, copy) NSData *data;
+@property (nonatomic, strong) NSError *error;
 
 @end
 
@@ -55,6 +55,7 @@ NSString *const TRVSXMLDictionaryTextKey = @"text";
   NSMutableDictionary *parent = self.stack.lastObject;
   NSMutableDictionary *child =
       [[NSMutableDictionary alloc] initWithDictionary:attributeDict];
+  self.text = [[NSMutableString alloc] init];
   id value = parent[elementName];
   if (value) {
     NSMutableArray *array = nil;
@@ -88,8 +89,7 @@ NSString *const TRVSXMLDictionaryTextKey = @"text";
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  
- self.error = parseError;
+  self.error = parseError;
 }
 
 @end
