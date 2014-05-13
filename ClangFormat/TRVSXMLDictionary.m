@@ -52,6 +52,11 @@ NSString *const TRVSXMLDictionaryTextKey = @"text";
        namespaceURI:(NSString *)namespaceURI
       qualifiedName:(NSString *)qName
          attributes:(NSDictionary *)attributeDict {
+  // foundCharacters will get called outside of parsing an element. Get rid of
+  // whatever text we've parsed so far. Otherwise other text can get added to
+  // the beginning of each element's text.
+  self.text = [NSMutableString stringWithString:@""];
+
   NSMutableDictionary *parent = self.stack.lastObject;
   NSMutableDictionary *child =
       [[NSMutableDictionary alloc] initWithDictionary:attributeDict];
