@@ -174,16 +174,13 @@
 
       [textStorage beginEditing];
 
-      NSArray *replacements =
-          [fragment.replacements valueForKey:@"replacement"];
-
       // Iterate over the replacements backwards, to make the replacements at
       // the end of the file first, so the offsets don't change.
       for (NSDictionary *replacement in
-           [replacements reverseObjectEnumerator]) {
-        NSString *offsetStr = [replacement valueForKey:@"_offset"];
-        NSString *lengthStr = [replacement valueForKey:@"_length"];
-        NSString *replacementStr = [replacement valueForKey:@"__text"];
+           [fragment.replacements reverseObjectEnumerator]) {
+        NSString *offsetStr = [replacement valueForKey:@"offset"];
+        NSString *lengthStr = [replacement valueForKey:@"length"];
+        NSString *replacementStr = [replacement valueForKey:@"text"];
 
         NSInteger offset = [offsetStr integerValue];
         NSInteger length = [lengthStr integerValue];
@@ -285,7 +282,7 @@
       __weak typeof(fragment) weakFragment = fragment;
       [fragment formatWithStyle:self.style
           usingClangFormatAtLaunchPath:executablePath
-                                 block:^(NSDictionary *replacements,
+                                 block:^(NSArray *replacements,
                                          NSError *error) {
                                      __strong typeof(weakFragment)
                                          strongFragment = weakFragment;
