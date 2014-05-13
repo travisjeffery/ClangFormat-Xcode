@@ -193,7 +193,7 @@
         if (!replacementStr) {
           replacementStr = @"";
         }
-		
+
         [textStorage replaceCharactersInRange:replacementRange
                                    withString:replacementStr
                               withUndoManager:document.undoManager];
@@ -260,11 +260,12 @@
     }
   }
 
-  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue,
+  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *lineRangeValue,
                                                      NSUInteger idx,
                                                      BOOL *stop) {
+    NSRange lineRange = [lineRangeValue rangeValue];
       NSRange characterRange =
-          [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
+          [textStorage characterRangeForLineRange:lineRange];
       if (characterRange.location == NSNotFound)
         return;
 
@@ -277,7 +278,7 @@
           fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
               builder.string = string;
               builder.range = characterRange;
-              builder.lineRange = rangeValue;
+              builder.lineRange = lineRange;
               builder.fileURL = document.fileURL;
           }];
 

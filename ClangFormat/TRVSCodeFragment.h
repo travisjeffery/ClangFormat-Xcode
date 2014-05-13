@@ -17,7 +17,7 @@
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic, copy) NSString *formattedString;
 @property (nonatomic) NSRange range;
-@property (nonatomic) NSValue *lineRange;
+@property (nonatomic) NSRange lineRange;
 @property (nonatomic, strong) NSURL *fileURL;
 
 @end
@@ -34,7 +34,7 @@
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic) NSRange range;
-@property (nonatomic) NSValue *lineRange;
+@property (nonatomic) NSRange lineRange;
 @property (nonatomic) NSDictionary *replacements;
 @property (nonatomic, strong) NSURL *fileURL;
 @property (nonatomic, strong) NSError *error;

@@ -54,6 +54,7 @@
         [self.string UTF8String],
         [self.string lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
   close(tmpFile);
+
   NSURL *tmpFileURL =
       [NSURL fileURLWithPath:[NSString stringWithUTF8String:tmpFilename]];
   free(tmpFilename);
@@ -62,11 +63,9 @@
   NSPipe *outputPipe = [NSPipe pipe];
   NSPipe *errorPipe = [NSPipe pipe];
 
-  NSRange lineRange = [self.lineRange rangeValue];
-
   // Xcode line ranges are zero-based, while clang-format's are one-based.
-  NSUInteger firstLine = lineRange.location + 1;
-  NSUInteger lastLine = firstLine + lineRange.length - 1;
+  NSUInteger firstLine = self.lineRange.location + 1;
+  NSUInteger lastLine = firstLine + self.lineRange.length - 1;
 
   NSTask *task = [[NSTask alloc] init];
   task.standardOutput = outputPipe;
@@ -86,20 +85,19 @@
   NSData *replacementData =
       [outputPipe.fileHandleForReading readDataToEndOfFile];
 
-
-  block(
-      self.replacements,
-      errorData.length > 0
-          ? [NSError
-                errorWithDomain:@"com.travisjeffery.error"
-                           code:-99
-                       userInfo:@{
-                                  NSLocalizedDescriptionKey : [[NSString alloc]
-                                      initWithData:errorData
-                                          encoding:NSUTF8StringEncoding]
-                                }]
-          : nil);
   self.replacements = [TRVSXMLDictionary dictionaryUsingData:replacementData];
+
+  block(self.replacements,
+        errorData.length > 0
+            ? [NSError errorWithDomain:@"com.travisjeffery.error"
+                                  code:-99
+                              userInfo:@{
+                                         NSLocalizedDescriptionKey :
+                                         [[NSString alloc]
+                                             initWithData:errorData
+                                                 encoding:NSUTF8StringEncoding]
+                                       }]
+            : nil);
 
   [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
 }
