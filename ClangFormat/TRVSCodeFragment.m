@@ -7,7 +7,7 @@
 //
 
 #import "TRVSCodeFragment.h"
-#import "XMLDictionary/XMLDictionary.h"
+#import "TRVSXMLDictionary.h"
 
 @interface TRVSCodeFragment ()
 
@@ -86,11 +86,6 @@
   NSData *replacementData =
       [outputPipe.fileHandleForReading readDataToEndOfFile];
 
-  XMLDictionaryParser *parser = [XMLDictionaryParser new];
-  parser.trimWhiteSpace = NO;
-  parser.stripEmptyNodes = NO;
-  parser.alwaysUseArrays = YES;
-  self.replacements = [parser dictionaryWithData:replacementData];
 
   block(
       self.replacements,
@@ -104,6 +99,7 @@
                                           encoding:NSUTF8StringEncoding]
                                 }]
           : nil);
+  self.replacements = [TRVSXMLDictionary dictionaryUsingData:replacementData];
 
   [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
 }
