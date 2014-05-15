@@ -24,21 +24,17 @@
   static dispatch_once_t onceToken;
 
   dispatch_once(&onceToken, ^{
-      sharedFormatter = [[self alloc] initWithStyle:nil
-                                     executablePath:nil
-                               useSystemClangFormat:NO];
+      sharedFormatter = [[self alloc] initWithStyle:nil executablePath:nil];
   });
 
   return sharedFormatter;
 }
 
 - (instancetype)initWithStyle:(NSString *)style
-               executablePath:(NSString *)executablePath
-         useSystemClangFormat:(BOOL)useSystemClangFormat {
+               executablePath:(NSString *)executablePath {
   if (self = [self init]) {
     self.style = style;
     self.executablePath = executablePath;
-    self.useSystemClangFormat = useSystemClangFormat;
   }
   return self;
 }
@@ -50,6 +46,9 @@
 }
 
 - (void)formatSelectedCharacters {
+  if (![TRVSXcode textViewHasSelection])
+    return;
+
   [self formatRanges:[[TRVSXcode textView] selectedRanges]
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
@@ -117,14 +116,6 @@
 
   DVTSourceTextStorage *textStorage = [document textStorage];
 
-  // If the entire file was selected, keep the selection that way afterwards.
-  BOOL entireFileSelected = NO;
-  NSRange wholeFileRange = NSMakeRange(0, [[document textStorage] length]);
-  if ([ranges count] == 1) {
-    NSRange candRange = [(NSValue *)[ranges objectAtIndex:0] rangeValue];
-    entireFileSelected = NSEqualRanges(candRange, wholeFileRange);
-  }
-
   NSArray *lineRanges =
       [self lineRangesOfCharacterRanges:ranges usingTextStorage:textStorage];
   NSArray *continuousLineRanges =
@@ -135,6 +126,8 @@
                          withDocument:document
                                 block:^(NSArray *fragments, NSArray *errors) {
                                     if (errors.count == 0) {
+                                      NSLog(@"FUCK no errors!");
+
                                       NSArray *selectionRanges = [self
                                           selectionRangesAfterReplacingFragments:
                                               fragments
@@ -143,12 +136,12 @@
                                                                     withDocument:
                                                                         document];
 
-                                      if (selectionRanges.count > 0 &&
-                                          !entireFileSelected) {
+                                      if (selectionRanges.count > 0)
                                         [[TRVSXcode textView]
                                             setSelectedRanges:selectionRanges];
-                                      }
                                     } else {
+                                      NSLog(@"FUCK has errors: %@", errors);
+
                                       NSAlert *alert = [NSAlert new];
                                       alert.messageText =
                                           [(NSError *)errors.firstObject
@@ -167,20 +160,14 @@
   [fragments enumerateObjectsUsingBlock:^(TRVSCodeFragment *fragment,
                                           NSUInteger idx,
                                           BOOL *stop) {
-
       [textStorage beginEditing];
 
-      // Iterate over the replacements backwards, to make the replacements at
-      // the end of the file first, so the offsets don't change.
-      for (NSDictionary *replacement in
-           [fragment.replacements reverseObjectEnumerator]) {
-        [textStorage
-            replaceCharactersInRange:
-                NSMakeRange([[replacement valueForKey:@"offset"] integerValue],
-                            [[replacement valueForKey:@"length"] integerValue])
-                          withString:[replacement valueForKey:@"text"] ?: @""
-                     withUndoManager:document.undoManager];
-      }
+      [textStorage replaceCharactersInRange:fragment.range
+                                 withString:fragment.formattedString
+                            withUndoManager:document.undoManager];
+
+      [self addSelectedRangeToSelectedRanges:selectionRanges
+                            usingTextStorage:textStorage];
 
       [textStorage endEditing];
   }];
@@ -215,44 +202,17 @@
   NSMutableArray *fragments = [[NSMutableArray alloc] init];
   NSMutableArray *errors = [[NSMutableArray alloc] init];
 
-  NSString *executablePath = self.executablePath;
-  if (self.useSystemClangFormat) {
-    NSDictionary *environmentDict = [[NSProcessInfo processInfo] environment];
-    NSString *shellString =
-        [environmentDict objectForKey:@"SHELL"] ?: @"/bin/bash";
-
-    NSPipe *outputPipe = [NSPipe pipe];
-    NSPipe *errorPipe = [NSPipe pipe];
-
-    NSTask *task = [[NSTask alloc] init];
-    task.standardOutput = outputPipe;
-    task.standardError = errorPipe;
-    task.launchPath = shellString;
-    task.arguments = @[ @"-l", @"-c", @"which clang-format" ];
-
-    [task launch];
-    [task waitUntilExit];
-    [errorPipe.fileHandleForReading readDataToEndOfFile];
-    NSData *outputData = [outputPipe.fileHandleForReading readDataToEndOfFile];
-    NSString *outputPath = [[NSString alloc] initWithData:outputData
-                                                 encoding:NSUTF8StringEncoding];
-    outputPath = [outputPath
-        stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    if ([outputPath length]) {
-      executablePath = outputPath;
-    }
-  }
-
-  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *lineRangeValue,
+  [continuousLineRanges enumerateObjectsUsingBlock:^(NSValue *rangeValue,
                                                      NSUInteger idx,
                                                      BOOL *stop) {
-      NSRange lineRange = [lineRangeValue rangeValue];
       NSRange characterRange =
-          [textStorage characterRangeForLineRange:lineRange];
+          [textStorage characterRangeForLineRange:[rangeValue rangeValue]];
+
       if (characterRange.location == NSNotFound)
         return;
 
-      NSString *string = [textStorage string];
+      NSString *string =
+          [[textStorage string] substringWithRange:characterRange];
 
       if (!string.length)
         return;
@@ -261,14 +221,13 @@
           fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
               builder.string = string;
               builder.range = characterRange;
-              builder.lineRange = lineRange;
               builder.fileURL = document.fileURL;
           }];
 
       __weak typeof(fragment) weakFragment = fragment;
       [fragment formatWithStyle:self.style
-          usingClangFormatAtLaunchPath:executablePath
-                                 block:^(NSArray *replacements,
+          usingClangFormatAtLaunchPath:self.executablePath
+                                 block:^(NSString *formattedString,
                                          NSError *error) {
                                      __strong typeof(weakFragment)
                                          strongFragment = weakFragment;

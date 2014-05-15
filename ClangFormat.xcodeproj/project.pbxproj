@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		320B996E187C1293003DB7B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320B996D187C1293003DB7B3 /* Cocoa.framework */; };
 		3228E445187F200D0037DECF /* TRVSCodeFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3228E444187F200D0037DECF /* TRVSCodeFragment.m */; };
-		3287485A192202D600A55515 /* TRVSXMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874859192202D600A55515 /* TRVSXMLDictionary.m */; };
 		32A57EE8187C05A4002DEC9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A57EE7187C05A4002DEC9D /* Foundation.framework */; };
 		32A57EEE187C05A4002DEC9D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A57EEC187C05A4002DEC9D /* InfoPlist.strings */; };
 		32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */; };
@@ -28,8 +27,6 @@
 		320B996D187C1293003DB7B3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		3228E443187F200D0037DECF /* TRVSCodeFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSCodeFragment.h; sourceTree = "<group>"; };
 		3228E444187F200D0037DECF /* TRVSCodeFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSCodeFragment.m; sourceTree = "<group>"; };
-		32874858192202D600A55515 /* TRVSXMLDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRVSXMLDictionary.h; sourceTree = "<group>"; };
-		32874859192202D600A55515 /* TRVSXMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRVSXMLDictionary.m; sourceTree = "<group>"; };
 		32A57EE2187C05A4002DEC9D /* ClangFormat.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClangFormat.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A57EE5187C05A4002DEC9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		32A57EE7187C05A4002DEC9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -105,8 +102,6 @@
 		32A57EE9187C05A4002DEC9D /* ClangFormat */ = {
 			isa = PBXGroup;
 			children = (
-				32874858192202D600A55515 /* TRVSXMLDictionary.h */,
-				32874859192202D600A55515 /* TRVSXMLDictionary.m */,
 				32A57EEF187C05A4002DEC9D /* TRVSClangFormat.h */,
 				32A57EF0187C05A4002DEC9D /* TRVSClangFormat.m */,
 				32ABEDD8187EFA4F00D4E980 /* TRVSFormatter.h */,
@@ -211,7 +206,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				32A57EF1187C05A4002DEC9D /* TRVSClangFormat.m in Sources */,
-				3287485A192202D600A55515 /* TRVSXMLDictionary.m in Sources */,
 				3228E445187F200D0037DECF /* TRVSCodeFragment.m in Sources */,
 				32ABEDDC187EFA4F00D4E980 /* TRVSFormatter.m in Sources */,
 				32F745E418823A57007541E1 /* NSDocument+TRVSClangFormat.m in Sources */,
@@ -265,11 +259,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					XMLDictionary,
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -302,11 +291,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					XMLDictionary,
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};

@@ -14,12 +14,10 @@
 
 @property (nonatomic, copy) NSString *style;
 @property (nonatomic, copy) NSString *executablePath;
-@property (nonatomic) BOOL useSystemClangFormat;
 
 + (instancetype)sharedFormatter;
 - (instancetype)initWithStyle:(NSString *)style
-               executablePath:(NSString *)executablePath
-         useSystemClangFormat:(BOOL)useSystemClangFormat;
+               executablePath:(NSString *)executablePath;
 - (void)formatActiveFile;
 - (void)formatSelectedCharacters;
 - (void)formatSelectedFiles;
