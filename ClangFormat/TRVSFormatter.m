@@ -10,6 +10,7 @@
 #import "TRVSXcode.h"
 #import "TRVSCodeFragment.h"
 #import "NSDocument+TRVSClangFormat.h"
+#import "NSTask+TRVSClangFormat.h"
 
 @interface TRVSFormatter ()
 
@@ -221,8 +222,10 @@
     task.launchPath = shellString;
     task.arguments = @[ @"-l", @"-c", @"which clang-format" ];
 
+    NSDate *killDate = [NSDate dateWithTimeIntervalSinceNow:10.0];
     [task launch];
-    [task waitUntilExit];
+    [task killIfNotDoneBy: killDate];
+
     [errorPipe.fileHandleForReading readDataToEndOfFile];
     NSData *outputData = [outputPipe.fileHandleForReading readDataToEndOfFile];
     NSString *outputPath = [[NSString alloc] initWithData:outputData

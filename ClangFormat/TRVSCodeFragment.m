@@ -7,6 +7,7 @@
 //
 
 #import "TRVSCodeFragment.h"
+#import "NSTask+TRVSClangFormat.h"
 
 @interface TRVSCodeFragment ()
 
@@ -65,8 +66,9 @@
 
   [outputPipe.fileHandleForReading readToEndOfFileInBackgroundAndNotify];
 
+  NSDate *killDate = [NSDate dateWithTimeIntervalSinceNow:10.0];
   [task launch];
-  [task waitUntilExit];
+  [task killIfNotDoneBy:killDate];
 
   NSData *errorData = [errorPipe.fileHandleForReading readDataToEndOfFile];
 
