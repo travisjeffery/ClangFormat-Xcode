@@ -60,22 +60,7 @@ static TRVSClangFormat *sharedPlugin;
 
   [self addMenuItemsToMenu];
 
-  //[[NSNotificationCenter defaultCenter] addObserver:self
-  // selector:@selector(notificationListener:) name:nil object:nil];
-
   return self;
-}
-
-- (void)notificationListener:(NSNotification *)notification {
-  // let's filter all the "normal" NSxxx events so that we only
-  // really see the Xcode specific events.
-  if ([[notification name] length] >= 2 &&
-      [[[notification name] substringWithRange:NSMakeRange(0, 2)]
-          isEqualTo:@"NS"]) {
-    return;
-  } else {
-    NSLog(@"  Notification: %@", [notification name]);
-  }
 }
 
 - (void)dealloc {
