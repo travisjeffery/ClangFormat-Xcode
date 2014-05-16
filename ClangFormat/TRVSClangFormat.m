@@ -56,10 +56,30 @@ static TRVSClangFormat *sharedPlugin;
       [self.bundle pathForResource:@"clang-format" ofType:@""];
 
   [NSDocument settrvs_formatOnSave:[self formatOnSave]];
+  [NSDocument settrvs_formatOnBuild:[self formatOnBuild]];
 
   [self addMenuItemsToMenu];
 
+  //[[NSNotificationCenter defaultCenter] addObserver:self
+  // selector:@selector(notificationListener:) name:nil object:nil];
+
   return self;
+}
+
+- (void)notificationListener:(NSNotification *)notification {
+  // let's filter all the "normal" NSxxx events so that we only
+  // really see the Xcode specific events.
+  if ([[notification name] length] >= 2 &&
+      [[[notification name] substringWithRange:NSMakeRange(0, 2)]
+          isEqualTo:@"NS"]) {
+    return;
+  } else {
+    NSLog(@"  Notification: %@", [notification name]);
+  }
+}
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Actions
@@ -86,12 +106,13 @@ static TRVSClangFormat *sharedPlugin;
   [self addStyleMenuItemsToFormatMenu];
   [self addSeparatorToFormatMenu];
   [self addFormatOnSaveMenuItem];
+  [self addFormatOnBuildMenuItem];
   [self addUseSystemClangFormatMenuItem];
 }
 
 - (void)addActioningMenuItemsToFormatMenu {
   NSMenuItem *formatActiveFileItem = [[NSMenuItem alloc]
-      initWithTitle:NSLocalizedString(@"Format File in Focus", nil)
+      initWithTitle:NSLocalizedString(@"Format File in Focus MATT", nil)
              action:@selector(formatActiveFile)
       keyEquivalent:@""];
   [formatActiveFileItem setTarget:self.formatter];
@@ -150,6 +171,22 @@ static TRVSClangFormat *sharedPlugin;
   [self.formatMenu addItem:toggleFormatOnSaveMenuItem];
 }
 
+- (void)addFormatOnBuildMenuItem {
+  // Only present the format on build menu if format on save is enabled.
+  if ([self formatOnSave]) {
+    NSString *title = NSLocalizedString(@"Enable Format on Build", nil);
+    if ([self formatOnBuild])
+      title = NSLocalizedString(@"Disable Format on Build", nil);
+
+    NSMenuItem *toggleFormatOnBuildMenuItem =
+        [[NSMenuItem alloc] initWithTitle:title
+                                   action:@selector(toggleFormatOnBuild)
+                            keyEquivalent:@""];
+    [toggleFormatOnBuildMenuItem setTarget:self];
+    [self.formatMenu addItem:toggleFormatOnBuildMenuItem];
+  }
+}
+
 - (void)addUseSystemClangFormatMenuItem {
   NSString *title = NSLocalizedString(@"Use System ClangFormat", nil);
   NSMenuItem *useSystemClangFormatMenuItem =
@@ -199,6 +236,23 @@ static TRVSClangFormat *sharedPlugin;
       objectForKey:[self formatOnSavePreferencesKey]] boolValue];
 }
 
+- (void)toggleFormatOnBuild {
+  BOOL formatOnBuild = ![self formatOnBuild];
+
+  [self.preferences setObject:@(formatOnBuild)
+                       forKey:[self formatOnBuildPreferencesKey]];
+  [self.preferences synchronize];
+
+  [NSDocument settrvs_formatOnBuild:formatOnBuild];
+
+  [self prepareFormatMenu];
+}
+
+- (BOOL)formatOnBuild {
+  return [[self.preferences
+      objectForKey:[self formatOnBuildPreferencesKey]] boolValue];
+}
+
 - (void)toggleUseSystemClangFormat {
   BOOL useSystemClangFormat = ![self useSystemClangFormat];
 
@@ -219,6 +273,11 @@ static TRVSClangFormat *sharedPlugin;
 - (NSString *)formatOnSavePreferencesKey {
   return
       [self.bundle.bundleIdentifier stringByAppendingString:@".formatOnSave"];
+}
+
+- (NSString *)formatOnBuildPreferencesKey {
+  return
+      [self.bundle.bundleIdentifier stringByAppendingString:@".formatOnBuild"];
 }
 
 - (NSString *)stylePreferencesKey {
