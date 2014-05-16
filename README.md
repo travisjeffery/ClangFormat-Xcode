@@ -22,7 +22,13 @@ Clone this repo, build and run ClangFormat, restart Xcode.
 
 I.e., you press `command-s` and the file is formatted and wrote to disk.
 
-In the menu, open Edit > Clang Format > Click Format on save (a checkmark appears in this menu item indicicating that the feature is active.)
+In the menu, open Edit > Clang Format > Click Format on save (a checkmark appears in this menu item indicating that the feature is active.)
+
+### Format on build
+
+I.e., you press `command-b` and the file is formatted and wrote to disk.
+
+In the menu, open Edit > Clang Format > Click Enable format on build (the menu item changes to Disable format on build). Format on save must be enabled to enable format on build.
 
 ### Assign keyboard shortcuts
 
