@@ -43,13 +43,13 @@ static TRVSClangFormat *sharedPlugin;
   self.preferences = [[TRVSPreferences alloc]
       initWithApplicationID:self.bundle.bundleIdentifier];
   NSString *style = [self.preferences objectForKey:[self stylePreferencesKey]]
-                            ?: [[self styles] firstObject];
+                        ?: [[self styles] firstObject];
   self.formatter = [TRVSFormatter sharedFormatter];
   self.formatter.style = style;
 
   NSNumber *useSystemClangFormat =
       [self.preferences objectForKey:[self useSystemClangFormatPreferencesKey]]
-              ?: [NSNumber numberWithBool:NO];
+          ?: [NSNumber numberWithBool:NO];
   self.formatter.useSystemClangFormat = [useSystemClangFormat boolValue];
 
   self.formatter.executablePath =
@@ -151,15 +151,14 @@ static TRVSClangFormat *sharedPlugin;
 }
 
 - (void)addUseSystemClangFormatMenuItem {
-  NSString *title = NSLocalizedString(@"Use System ClangFormat", nil);
+  NSString *title = [self useSystemClangFormat]
+                        ? NSLocalizedString(@"Use Bundled ClangFormat", nil)
+                        : NSLocalizedString(@"Use System ClangFormat", nil);
   NSMenuItem *useSystemClangFormatMenuItem =
       [[NSMenuItem alloc] initWithTitle:title
                                  action:@selector(toggleUseSystemClangFormat)
                           keyEquivalent:@""];
   [useSystemClangFormatMenuItem setTarget:self];
-  if ([self useSystemClangFormat]) {
-    useSystemClangFormatMenuItem.state = NSOnState;
-  }
   [self.formatMenu addItem:useSystemClangFormatMenuItem];
 }
 

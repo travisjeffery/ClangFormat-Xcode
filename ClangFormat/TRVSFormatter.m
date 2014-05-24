@@ -38,7 +38,7 @@
   if (self = [self init]) {
     self.style = style;
     self.executablePath = executablePath;
-	self.useSystemClangFormat = useSystemClangFormat;
+    self.useSystemClangFormat = useSystemClangFormat;
   }
   return self;
 }
@@ -244,8 +244,8 @@
       if (!string.length)
         return;
 
-      TRVSCodeFragment *fragment =
-          [TRVSCodeFragment fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
+      TRVSCodeFragment *fragment = [TRVSCodeFragment
+          fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
               builder.string = string;
               builder.range = characterRange;
               builder.fileURL = document.fileURL;
