@@ -130,13 +130,10 @@
                          withDocument:document
                                 block:^(NSArray *fragments, NSArray *errors) {
                                     if (errors.count == 0) {
-                                      NSLog(@"FUCK no errors!");
-
                                       NSArray *selectionRanges = [self
                                           selectionRangesAfterReplacingFragments:
-                                              fragments
-                                                                usingTextStorage:
-                                                                    textStorage
+                                              fragments usingTextStorage:
+                                                            textStorage
                                                                     withDocument:
                                                                         document];
 
@@ -144,8 +141,6 @@
                                         [[TRVSXcode textView]
                                             setSelectedRanges:selectionRanges];
                                     } else {
-                                      NSLog(@"FUCK has errors: %@", errors);
-
                                       NSAlert *alert = [NSAlert new];
                                       alert.messageText =
                                           [(NSError *)errors.firstObject
