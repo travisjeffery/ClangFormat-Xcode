@@ -38,7 +38,7 @@
   if (self = [self init]) {
     self.style = style;
     self.executablePath = executablePath;
-	self.useSystemClangFormat = useSystemClangFormat;
+    self.useSystemClangFormat = useSystemClangFormat;
   }
   return self;
 }
@@ -130,13 +130,10 @@
                          withDocument:document
                                 block:^(NSArray *fragments, NSArray *errors) {
                                     if (errors.count == 0) {
-                                      NSLog(@"FUCK no errors!");
-
                                       NSArray *selectionRanges = [self
                                           selectionRangesAfterReplacingFragments:
-                                              fragments
-                                                                usingTextStorage:
-                                                                    textStorage
+                                              fragments usingTextStorage:
+                                                            textStorage
                                                                     withDocument:
                                                                         document];
 
@@ -144,8 +141,6 @@
                                         [[TRVSXcode textView]
                                             setSelectedRanges:selectionRanges];
                                     } else {
-                                      NSLog(@"FUCK has errors: %@", errors);
-
                                       NSAlert *alert = [NSAlert new];
                                       alert.messageText =
                                           [(NSError *)errors.firstObject
@@ -249,8 +244,8 @@
       if (!string.length)
         return;
 
-      TRVSCodeFragment *fragment =
-          [TRVSCodeFragment fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
+      TRVSCodeFragment *fragment = [TRVSCodeFragment
+          fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
               builder.string = string;
               builder.range = characterRange;
               builder.fileURL = document.fileURL;
