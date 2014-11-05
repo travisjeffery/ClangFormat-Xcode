@@ -57,7 +57,7 @@ static BOOL trvs_formatOnSave;
 }
 
 - (BOOL)trvs_shouldFormat {
-    return [[NSSet setWithObjects:@"c", @"h", @"cpp", @"cc", @"hpp", @"m", @"mm", nil] containsObject:[[[self fileURL] pathExtension] lowercaseString]];
+    return [[NSSet setWithObjects:@"c", @"h", @"cpp", @"cc", @"hpp", @"ipp", @"m", @"mm", nil] containsObject:[[[self fileURL] pathExtension] lowercaseString]];
 }
 
 @end
