@@ -34,7 +34,7 @@
 - (instancetype)initWithBuilder:(TRVSCodeFragmentBuilder *)builder {
   if (self = [super init]) {
     _string = [builder.string copy];
-    _range = builder.range;
+    _textRange = builder.textRange;
     _fileURL = builder.fileURL;
   }
   return self;
@@ -42,6 +42,7 @@
 
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
+                       lineRange:(NSRange)lineRange
                            block:(void (^)(NSString *formattedString,
                                            NSError *error))block {
   NSURL *tmpFileURL = [self.fileURL URLByAppendingPathExtension:@"trvs"];
@@ -58,6 +59,10 @@
   task.standardError = errorPipe;
   task.launchPath = launchPath;
   task.arguments = @[
+    [NSString
+        stringWithFormat:@"-lines=%tu:%tu",
+                         lineRange.location + 1,                  // 1-based
+                         lineRange.location + lineRange.length],  // 1-based
     [NSString stringWithFormat:@"--style=%@", style],
     @"-i",
     [tmpFileURL path]
