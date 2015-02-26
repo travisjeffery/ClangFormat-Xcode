@@ -46,7 +46,7 @@
   NSRange diffBefore = NSMakeRange(0, _string.length);
   NSRange diffAfter = NSMakeRange(0, formattedDoc.length);
   NSUInteger i = 0;
-  while (i < diffBefore.length && i < diffAfter.length) {
+  while (i < _textRange.location && i < diffAfter.length) {
     if ([_string characterAtIndex:i] == [formattedDoc characterAtIndex:i]) {
       ++i;
     } else {
