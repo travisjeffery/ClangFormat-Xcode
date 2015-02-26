@@ -34,14 +34,47 @@
 - (instancetype)initWithBuilder:(TRVSCodeFragmentBuilder *)builder {
   if (self = [super init]) {
     _string = [builder.string copy];
-    _range = builder.range;
+    _textRange = builder.textRange;
     _fileURL = builder.fileURL;
   }
   return self;
 }
 
+// Find the smallest possible part that is different from before formatting,
+// so we don't have to replace the entire file.
+- (void)updateRangeToReplace:(NSString *)formattedDoc {
+  NSRange diffBefore = NSMakeRange(0, _string.length);
+  NSRange diffAfter = NSMakeRange(0, formattedDoc.length);
+  NSUInteger i = 0;
+  while (i < diffBefore.length && i < diffAfter.length) {
+    if ([_string characterAtIndex:i] == [formattedDoc characterAtIndex:i]) {
+      ++i;
+    } else {
+      break;
+    }
+  }
+  diffBefore.location = i;
+  diffAfter.location = i;
+  i = 0;
+  while (i < (diffBefore.length - diffBefore.location) &&
+         i < (diffAfter.length - diffAfter.location)) {
+    if ([_string characterAtIndex:diffBefore.length - i - 1] ==
+        [formattedDoc characterAtIndex:diffAfter.length - i - 1]) {
+      ++i;
+    } else {
+      break;
+    }
+  }
+  diffBefore.length = diffBefore.length - i - diffBefore.location;
+  diffAfter.length = diffAfter.length - i - diffAfter.location;
+
+  self.rangeToReplace = diffBefore;
+  self.formattedString = [formattedDoc substringWithRange:diffAfter];
+};
+
 - (void)formatWithStyle:(NSString *)style
     usingClangFormatAtLaunchPath:(NSString *)launchPath
+                       lineRange:(NSRange)lineRange
                            block:(void (^)(NSString *formattedString,
                                            NSError *error))block {
   NSURL *tmpFileURL = [self.fileURL URLByAppendingPathExtension:@"trvs"];
@@ -58,6 +91,10 @@
   task.standardError = errorPipe;
   task.launchPath = launchPath;
   task.arguments = @[
+    [NSString
+        stringWithFormat:@"-lines=%tu:%tu",
+                         lineRange.location + 1,                  // 1-based
+                         lineRange.location + lineRange.length],  // 1-based
     [NSString stringWithFormat:@"--style=%@", style],
     @"-i",
     [tmpFileURL path]
@@ -70,10 +107,10 @@
 
   NSData *errorData = [errorPipe.fileHandleForReading readDataToEndOfFile];
 
-  self.formattedString = [NSString stringWithContentsOfURL:tmpFileURL
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:NULL];
-
+  NSString *formattedDoc = [NSString stringWithContentsOfURL:tmpFileURL
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:NULL];
+  [self updateRangeToReplace:formattedDoc];
   block(self.formattedString,
         errorData.length > 0
             ? [NSError errorWithDomain:@"com.travisjeffery.error"
