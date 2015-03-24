@@ -33,9 +33,9 @@
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic, copy) NSString *formattedString;
-@property (nonatomic) NSRange textRange;
-@property (nonatomic) NSRange rangeToReplace;
+@property (nonatomic) NSRange textRangePreFormat;
 @property (nonatomic) NSRange textRangePostFormat;
+@property (nonatomic) NSRange rangeToReplace;
 @property (nonatomic, strong) NSURL *fileURL;
 @property (nonatomic, strong) NSError *error;
 

@@ -34,7 +34,7 @@
 - (instancetype)initWithBuilder:(TRVSCodeFragmentBuilder *)builder {
   if (self = [super init]) {
     _string = [builder.string copy];
-    _textRange = builder.textRange;
+    _textRangePreFormat = builder.textRange;
     _fileURL = builder.fileURL;
   }
   return self;
@@ -45,13 +45,13 @@
 - (void)updateRangeToReplace:(NSString *)formattedDoc {
   NSUInteger originalLen = _string.length;
   NSUInteger formattedLen = formattedDoc.length;
-  NSRange originalSelection = _textRange;
+  NSRange originalSelection = _textRangePreFormat;
   NSRange rangeInOriginalDoc = NSMakeRange(0, _string.length);
   NSRange rangeInFormattedDoc = NSMakeRange(0, formattedDoc.length);
 
   // Find the left boundary.
   NSUInteger i;
-  for (i = 0; i < _textRange.location - 1; ++i) {
+  for (i = 0; i < _textRangePreFormat.location - 1; ++i) {
     if ([_string characterAtIndex:i] == [formattedDoc characterAtIndex:i]) {
       ++i;
     } else {
