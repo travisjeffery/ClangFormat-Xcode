@@ -43,33 +43,43 @@
 // Find the smallest possible part that is different from before formatting,
 // so we don't have to replace the entire file.
 - (void)updateRangeToReplace:(NSString *)formattedDoc {
-  NSRange diffBefore = NSMakeRange(0, _string.length);
-  NSRange diffAfter = NSMakeRange(0, formattedDoc.length);
-  NSUInteger i = 0;
-  while (i < _textRange.location && i < diffAfter.length) {
+  NSUInteger originalLen = _string.length;
+  NSUInteger formattedLen = formattedDoc.length;
+  NSRange originalSelection = _textRange;
+  NSRange rangeInOriginalDoc = NSMakeRange(0, _string.length);
+  NSRange rangeInFormattedDoc = NSMakeRange(0, formattedDoc.length);
+
+  // Find the left boundary.
+  NSUInteger i;
+  for (i = 0; i < _textRange.location - 1; ++i) {
     if ([_string characterAtIndex:i] == [formattedDoc characterAtIndex:i]) {
       ++i;
     } else {
       break;
     }
   }
-  diffBefore.location = i;
-  diffAfter.location = i;
-  i = 0;
-  while (i < (diffBefore.length - diffBefore.location) &&
-         i < (diffAfter.length - diffAfter.location)) {
-    if ([_string characterAtIndex:diffBefore.length - i - 1] ==
-        [formattedDoc characterAtIndex:diffAfter.length - i - 1]) {
-      ++i;
+  rangeInOriginalDoc.location = i;
+  rangeInOriginalDoc.length -= i;
+  rangeInFormattedDoc.location = i;
+  rangeInFormattedDoc.length -= i;
+
+  // Find the left boundary.
+  NSUInteger maxJ = originalLen - NSMaxRange(originalSelection);
+  NSUInteger j;
+  for (j = 0; j < maxJ; ++j) {
+    if ([_string characterAtIndex:originalLen - j - 1] ==
+        [formattedDoc characterAtIndex:formattedLen - j - 1]) {
+      ++j;
     } else {
       break;
     }
   }
-  diffBefore.length = diffBefore.length - i - diffBefore.location;
-  diffAfter.length = diffAfter.length - i - diffAfter.location;
+  rangeInOriginalDoc.length -= j;
+  rangeInFormattedDoc.length -= j;
 
-  self.rangeToReplace = diffBefore;
-  self.formattedString = [formattedDoc substringWithRange:diffAfter];
+  self.rangeToReplace = rangeInOriginalDoc;
+  self.textRangePostFormat = rangeInFormattedDoc;
+  self.formattedString = [formattedDoc substringWithRange:rangeInFormattedDoc];
 };
 
 - (void)formatWithStyle:(NSString *)style
