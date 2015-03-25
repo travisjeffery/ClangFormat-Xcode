@@ -166,8 +166,7 @@
                             withUndoManager:document.undoManager];
 
       [self addSelectedRangeToSelectedRanges:selectionRanges
-                            usingTextStorage:textStorage
-                              selectionRange:fragment.textRangePostFormat];
+                            usingTextStorage:textStorage];
 
       [textStorage endEditing];
   }];
@@ -176,8 +175,7 @@
 }
 
 - (void)addSelectedRangeToSelectedRanges:(NSMutableArray *)selectionRanges
-                        usingTextStorage:(DVTSourceTextStorage *)textStorage
-                          selectionRange:(NSRange)anotherRange {
+                        usingTextStorage:(DVTSourceTextStorage *)textStorage {
   if (selectionRanges.count > 0) {
     NSUInteger i = 0;
 
@@ -190,8 +188,9 @@
     }
   }
 
-  if (anotherRange.location != NSNotFound) {
-    [selectionRanges addObject:[NSValue valueWithRange:anotherRange]];
+  NSRange editedRange = textStorage.editedRange;
+  if (editedRange.location != NSNotFound) {
+    [selectionRanges addObject:[NSValue valueWithRange:editedRange]];
   }
 }
 

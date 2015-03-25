@@ -46,31 +46,23 @@
   NSUInteger originalLen = _string.length;
   NSUInteger formattedLen = formattedDoc.length;
   NSRange originalSelection = _textRangePreFormat;
-  NSRange rangeInOriginalDoc = NSMakeRange(0, _string.length);
-  NSRange rangeInFormattedDoc = NSMakeRange(0, formattedDoc.length);
 
   // Find the left boundary.
   NSUInteger i;
-  for (i = 0; i < _textRangePreFormat.location - 1; ++i) {
-    if ([_string characterAtIndex:i] == [formattedDoc characterAtIndex:i]) {
-      ++i;
-    } else {
+  for (i = 0; i < _textRangePreFormat.location; ++i) {
+    if ([_string characterAtIndex:i] != [formattedDoc characterAtIndex:i]) {
       break;
     }
   }
-  rangeInOriginalDoc.location = i;
-  rangeInOriginalDoc.length -= i;
-  rangeInFormattedDoc.location = i;
-  rangeInFormattedDoc.length -= i;
+  NSRange rangeInOriginalDoc = NSMakeRange(i, originalLen - i);
+  NSRange rangeInFormattedDoc = NSMakeRange(i, formattedLen - i);
 
-  // Find the left boundary.
+  // Find the right boundary.
   NSUInteger maxJ = originalLen - NSMaxRange(originalSelection);
   NSUInteger j;
   for (j = 0; j < maxJ; ++j) {
-    if ([_string characterAtIndex:originalLen - j - 1] ==
+    if ([_string characterAtIndex:originalLen - j - 1] !=
         [formattedDoc characterAtIndex:formattedLen - j - 1]) {
-      ++j;
-    } else {
       break;
     }
   }
