@@ -16,7 +16,7 @@
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic, copy) NSString *formattedString;
-@property (nonatomic) NSRange range;
+@property (nonatomic) NSRange textRange;
 @property (nonatomic, strong) NSURL *fileURL;
 
 @end
@@ -25,11 +25,17 @@
 
 + (instancetype)fragmentUsingBlock:(void (^)(TRVSCodeFragmentBuilder *builder))block;
 
-- (void)formatWithStyle:(NSString *)style usingClangFormatAtLaunchPath:(NSString *)launchPath block:(void (^)(NSString *formattedString, NSError *error))block;
+- (void)formatWithStyle:(NSString *)style
+    usingClangFormatAtLaunchPath:(NSString *)launchPath
+                       lineRange:(NSRange)lineRange
+                           block:(void (^)(NSString *formattedString,
+                                           NSError *error))block;
 
 @property (nonatomic, copy) NSString *string;
 @property (nonatomic, copy) NSString *formattedString;
-@property (nonatomic) NSRange range;
+@property (nonatomic) NSRange textRangePreFormat;
+@property (nonatomic) NSRange textRangePostFormat;
+@property (nonatomic) NSRange rangeToReplace;
 @property (nonatomic, strong) NSURL *fileURL;
 @property (nonatomic, strong) NSError *error;
 

@@ -161,7 +161,7 @@
                                           BOOL *stop) {
       [textStorage beginEditing];
 
-      [textStorage replaceCharactersInRange:fragment.range
+      [textStorage replaceCharactersInRange:fragment.rangeToReplace
                                  withString:fragment.formattedString
                             withUndoManager:document.undoManager];
 
@@ -188,9 +188,10 @@
     }
   }
 
-  NSRange editedRange = [textStorage editedRange];
-  if (editedRange.location != NSNotFound)
+  NSRange editedRange = textStorage.editedRange;
+  if (editedRange.location != NSNotFound) {
     [selectionRanges addObject:[NSValue valueWithRange:editedRange]];
+  }
 }
 
 - (void)fragmentsOfContinuousLineRanges:(NSArray *)continuousLineRanges
@@ -246,14 +247,19 @@
 
       TRVSCodeFragment *fragment = [TRVSCodeFragment
           fragmentUsingBlock:^(TRVSCodeFragmentBuilder *builder) {
-              builder.string = string;
-              builder.range = characterRange;
+              builder.string = [textStorage string];
+              builder.textRange = characterRange;
               builder.fileURL = document.fileURL;
           }];
 
+    // clang-format doesn't support descrete ranges, so only the first range
+    // can be taken. This is fine because in practice, we have only one
+    // selected range in Xcode.
+    NSRange lineRange = [continuousLineRanges[0] rangeValue];
       __weak typeof(fragment) weakFragment = fragment;
       [fragment formatWithStyle:self.style
           usingClangFormatAtLaunchPath:executablePath
+                             lineRange:lineRange
                                  block:^(NSString *formattedString,
                                          NSError *error) {
                                      __strong typeof(weakFragment)
