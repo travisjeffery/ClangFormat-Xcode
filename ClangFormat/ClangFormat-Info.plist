@@ -33,6 +33,8 @@
 		<string>AD68E85B-441B-4301-B564-A45E4919A6AD</string>
 		<string>C4A681B0-4A26-480E-93EC-1218098B9AA0</string>
 	</array>
+	<key>NSPrincipalClass</key>
+	<string>TRVSClangFormat</string>
 	<key>XC4Compatible</key>
 	<true/>
 	<key>XCGCReady</key>
