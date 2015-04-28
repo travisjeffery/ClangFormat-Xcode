@@ -57,9 +57,22 @@ static TRVSClangFormat *sharedPlugin;
 
   [NSDocument settrvs_formatOnSave:[self formatOnSave]];
 
-  [self addMenuItemsToMenu];
+  [[NSNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(applicationDidFinishLaunching:)
+             name:NSApplicationDidFinishLaunchingNotification
+           object:nil];
 
   return self;
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+  [self addMenuItemsToMenu];
+
+  [[NSNotificationCenter defaultCenter]
+      removeObserver:self
+                name:NSApplicationDidFinishLaunchingNotification
+              object:nil];
 }
 
 #pragma mark - Actions
