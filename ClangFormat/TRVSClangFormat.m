@@ -30,8 +30,9 @@ static TRVSClangFormat *sharedPlugin;
   NSString *currentApplicationName =
       [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
   if ([currentApplicationName isEqual:@"Xcode"]) {
-    dispatch_once(&onceToken,
-                  ^{ sharedPlugin = [[self alloc] initWithBundle:plugin]; });
+    dispatch_once(&onceToken, ^{
+      sharedPlugin = [[self alloc] initWithBundle:plugin];
+    });
   }
 }
 
@@ -57,9 +58,22 @@ static TRVSClangFormat *sharedPlugin;
 
   [NSDocument settrvs_formatOnSave:[self formatOnSave]];
 
-  [self addMenuItemsToMenu];
+  [[NSNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(applicationDidFinishLaunching:)
+             name:NSApplicationDidFinishLaunchingNotification
+           object:nil];
 
   return self;
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+  [self addMenuItemsToMenu];
+
+  [[NSNotificationCenter defaultCenter]
+      removeObserver:self
+                name:NSApplicationDidFinishLaunchingNotification
+              object:nil];
 }
 
 #pragma mark - Actions
@@ -117,10 +131,9 @@ static TRVSClangFormat *sharedPlugin;
 }
 
 - (void)addStyleMenuItemsToFormatMenu {
-  [[self styles] enumerateObjectsUsingBlock:^(NSString *format,
-                                              NSUInteger idx,
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx,
                                               BOOL *stop) {
-      [self addMenuItemWithStyle:format];
+    [self addMenuItemWithStyle:format];
   }];
 }
 
