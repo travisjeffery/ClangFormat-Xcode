@@ -30,8 +30,9 @@ static TRVSClangFormat *sharedPlugin;
   NSString *currentApplicationName =
       [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
   if ([currentApplicationName isEqual:@"Xcode"]) {
-    dispatch_once(&onceToken,
-                  ^{ sharedPlugin = [[self alloc] initWithBundle:plugin]; });
+    dispatch_once(&onceToken, ^{
+      sharedPlugin = [[self alloc] initWithBundle:plugin];
+    });
   }
 }
 
@@ -130,10 +131,9 @@ static TRVSClangFormat *sharedPlugin;
 }
 
 - (void)addStyleMenuItemsToFormatMenu {
-  [[self styles] enumerateObjectsUsingBlock:^(NSString *format,
-                                              NSUInteger idx,
+  [[self styles] enumerateObjectsUsingBlock:^(NSString *format, NSUInteger idx,
                                               BOOL *stop) {
-      [self addMenuItemWithStyle:format];
+    [self addMenuItemWithStyle:format];
   }];
 }
 
