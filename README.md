@@ -41,7 +41,7 @@ In this example, we'll format the active file when `control-i` is pressed.
 
 By using Clang Format > File in the plug-in menu, Clang will look for the nearest `.clang-format` file from the input file. Most likely, you'll have a .clang-format file at the root of your project.
 
-[Here are the options for .clang-format and how they're configured](http://clang.llvm.org/docs/ClangFormatStyleOptions.html).
+[Here are the options for .clang-format and how they're configured](http://clang.llvm.org/docs/ClangFormatStyleOptions.html). Here's a [cool interactive website](http://clangformat.com/) to help you make your .clang-format file.
 
 If one of the built-in styles is close to what you want, you can bootstrap your own configuration with:
 
