@@ -225,7 +225,9 @@
                                                  encoding:NSUTF8StringEncoding];
     outputPath = [outputPath
         stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    if ([outputPath length]) {
+      
+    BOOL isDirectory = NO;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:outputPath isDirectory:&isDirectory] && !isDirectory) {
       executablePath = outputPath;
     }
   }
