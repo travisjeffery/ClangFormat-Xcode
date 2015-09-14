@@ -95,7 +95,8 @@
   [self formatRanges:@[ [NSValue valueWithRange:NSMakeRange(0, length)] ]
           inDocument:document];
 
-  NSUInteger diff = labs(length - [[document textStorage] length]);
+  NSUInteger textStorageLength = [[document textStorage] length];
+  NSUInteger diff = MAX(length, textStorageLength) - MIN(length, textStorageLength);
 
   BOOL documentIsLongerAfterFormatting =
       length > [[document textStorage] length];
