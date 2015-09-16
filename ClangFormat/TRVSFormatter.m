@@ -95,7 +95,8 @@
   [self formatRanges:@[ [NSValue valueWithRange:NSMakeRange(0, length)] ]
           inDocument:document];
 
-  NSUInteger diff = labs(length - [[document textStorage] length]);
+  NSUInteger textStorageLength = [[document textStorage] length];
+  NSUInteger diff = MAX(length, textStorageLength) - MIN(length, textStorageLength);
 
   BOOL documentIsLongerAfterFormatting =
       length > [[document textStorage] length];
@@ -225,7 +226,9 @@
                                                  encoding:NSUTF8StringEncoding];
     outputPath = [outputPath
         stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    if ([outputPath length]) {
+      
+    BOOL isDirectory = NO;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:outputPath isDirectory:&isDirectory] && !isDirectory) {
       executablePath = outputPath;
     }
   }
