@@ -58,12 +58,14 @@
 }
 
 - (void)formatCurrentStatement {
-  // If there is selection, don't do formatting.
+  // If there is selection, we don't do formatting. The feature only works if
+  // there is no explicit selection of text.
   if ([TRVSXcode textViewHasSelection])
     return;
 
-  // Otherwise just pass in the cursor position, and clang-format will takes
-  // care of formatting the statement under cursor.
+  // When there is no explicit selection, the selected range is the cursor
+  // location with 0 length. clang-format command will find the statement under
+  // the cursor and format it.
   [self formatRanges:[[TRVSXcode textView] selectedRanges]
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
