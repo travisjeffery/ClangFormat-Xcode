@@ -57,6 +57,17 @@
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
 
+- (void)formatCurrentStatement {
+  // If there is selection, don't do formatting.
+  if ([TRVSXcode textViewHasSelection])
+    return;
+
+  // Otherwise just pass in the cursor position, and clang-format will takes
+  // care of formatting the statement under cursor.
+  [self formatRanges:[[TRVSXcode textView] selectedRanges]
+          inDocument:[TRVSXcode sourceCodeDocument]];
+}
+
 - (void)formatSelectedFiles {
   [[TRVSXcode selectedFileNavigableItems]
       enumerateObjectsUsingBlock:^(IDEFileNavigableItem *fileNavigableItem,
