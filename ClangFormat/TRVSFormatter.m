@@ -216,7 +216,7 @@
     task.standardOutput = outputPipe;
     task.standardError = errorPipe;
     task.launchPath = shellString;
-    task.arguments = @[ @"-l", @"-c", @"which clang-format" ];
+    task.arguments = @[ @"-c", @"which clang-format" ];
 
     [task launch];
     [task waitUntilExit];
