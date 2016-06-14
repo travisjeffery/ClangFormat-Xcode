@@ -50,9 +50,8 @@
 }
 
 - (void)formatSelectedCharacters {
-  if (![TRVSXcode textViewHasSelection])
-    return;
-
+  // Even if there is no selection, go one and perform a format with 0-length
+  // range. This will format the statement under cursor.
   [self formatRanges:[[TRVSXcode textView] selectedRanges]
           inDocument:[TRVSXcode sourceCodeDocument]];
 }
