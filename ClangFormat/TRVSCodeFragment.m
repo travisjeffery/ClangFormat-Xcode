@@ -79,7 +79,15 @@
                        lineRange:(NSRange)lineRange
                            block:(void (^)(NSString *formattedString,
                                            NSError *error))block {
-  NSURL *tmpFileURL = [self.fileURL URLByAppendingPathExtension:@"trvs"];
+  NSString *fileName = [self.fileURL lastPathComponent];
+  NSURL *tmpDirURL = [[self.fileURL URLByDeletingLastPathComponent]
+      URLByAppendingPathComponent:@"ClangFormatXcodeTmpDir"];
+  [[NSFileManager defaultManager] createDirectoryAtURL:tmpDirURL
+                           withIntermediateDirectories:YES
+                                            attributes:nil
+                                                 error:nil];
+
+  NSURL *tmpFileURL = [tmpDirURL URLByAppendingPathComponent:fileName];
   [self.string writeToURL:tmpFileURL
                atomically:YES
                  encoding:NSUTF8StringEncoding
@@ -125,7 +133,7 @@
                                        }]
             : nil);
 
-  [[NSFileManager defaultManager] removeItemAtURL:tmpFileURL error:NULL];
+  [[NSFileManager defaultManager] removeItemAtURL:tmpDirURL error:NULL];
 }
 
 @end
