@@ -10,7 +10,7 @@ With [clang-format](http://clang.llvm.org/docs/ClangFormat.html) you can use Cla
 
 ## Installation:
 
-Install via [Alcatraz](https://alcatraz.io/).
+Install via [Alcatraz](http://alcatraz.io/).
 
 OR
 
