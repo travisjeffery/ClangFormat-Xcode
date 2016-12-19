@@ -118,6 +118,13 @@ static TRVSClangFormat *sharedPlugin;
   [formatSelectedCharacters setTarget:self.formatter];
   [self.formatMenu addItem:formatSelectedCharacters];
 
+  NSMenuItem *formatCurrentStatement = [[NSMenuItem alloc]
+      initWithTitle:NSLocalizedString(@"Format Current Statement", nil)
+             action:@selector(formatCurrentStatement)
+      keyEquivalent:@""];
+  [formatCurrentStatement setTarget:self.formatter];
+  [self.formatMenu addItem:formatCurrentStatement];
+
   NSMenuItem *formatSelectedFilesItem = [[NSMenuItem alloc]
       initWithTitle:NSLocalizedString(@"Format Selected Files", nil)
              action:@selector(formatSelectedFiles)
