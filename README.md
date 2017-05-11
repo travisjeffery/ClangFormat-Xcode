@@ -8,7 +8,11 @@ With [clang-format](http://clang.llvm.org/docs/ClangFormat.html) you can use Cla
 
 ![demo](https://raw.github.com/travisjeffery/ClangFormat-Xcode/master/README/clangformat-xcode-demo.gif)
 
+
 ## Installation:
+
+:warning: From XCode 8+, unsigning is required in order to use community-made plugins.
+Check https://github.com/inket/update_xcode_plugins for more information. 
 
 Install via [Alcatraz](http://alcatraz.io/).
 
