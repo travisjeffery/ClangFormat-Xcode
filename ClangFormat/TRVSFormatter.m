@@ -88,6 +88,17 @@
 }
 
 - (void)formatDocument:(IDESourceCodeDocument *)document {
+  NSRect rect = [[TRVSXcode textView] visibleRect];
+  NSPoint containerOrigin = [[TRVSXcode textView] textContainerOrigin];
+  rect = NSOffsetRect(rect, -containerOrigin.x, -containerOrigin.y);
+  NSRange glyphRange = [[[TRVSXcode textView] layoutManager]
+      glyphRangeForBoundingRect:rect
+                inTextContainer:[[TRVSXcode textView] textContainer]];
+  NSRange charRange = [[[TRVSXcode textView] layoutManager]
+      characterRangeForGlyphRange:glyphRange
+                 actualGlyphRange:NULL];
+    
+    
   NSUInteger location = [[TRVSXcode textView] selectedRange].location;
   NSUInteger length = [[document textStorage] length];
 
@@ -102,13 +113,15 @@
 
   if (documentIsLongerAfterFormatting && location > diff) {
     location -= diff;
+    charRange.length -= diff;
   } else if (!documentIsLongerAfterFormatting) {
     location += diff;
+    charRange.length += diff;
   }
 
   NSRange range = NSMakeRange(location, 0);
   [[TRVSXcode textView] setSelectedRange:range];
-  [[TRVSXcode textView] scrollRangeToVisible:range];
+  [[TRVSXcode textView] scrollRangeToVisible:charRange];
 }
 
 #pragma mark - Private
